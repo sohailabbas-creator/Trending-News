@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trending News</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; line-height: 1.6; }
+    header { background: #111; color: #fff; padding: 20px; text-align: center; }
+    h1 { margin: 0; font-size: 2rem; }
+
+    .news-container { max-width: 1200px; margin: 20px auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+
+    .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
+    .card h2 { font-size: 1.2rem; margin-bottom: 10px; }
+    .card p { flex-grow: 1; }
+    .card a { text-decoration: none; color: #0077cc; margin-top: 10px; display: inline-block; }
+    .card a:hover { text-decoration: underline; }
+
+    .loader { text-align: center; font-size: 18px; padding: 20px; }
+
+    footer { background:#111; color:#fff; text-align:center; padding:20px; margin-top:20px; }
+    footer a { color:#fff; margin:0 10px; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.5rem; }
+      .card h2 { font-size: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .news-container { padding: 5px; grid-template-columns: 1fr; }
+      .card { padding: 15px; }
+      .card h2 { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Trending News</h1>
+</header>
+
+
+<div class="news-container">
+  <h2 style="grid-column: 1 / -1; font-size: 1.5rem; margin-bottom: 15px;">Latest Blogs</h2>
+
+  <div class="card">
+    <h2>How AI Is Changing the Future of Technology</h2>
+    <p>Artificial Intelligence is revolutionizing every industry, from healthcare to finance. Here’s what’s coming next...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>Top 5 Tips to Improve Your Coding Skills</h2>
+    <p>Practical advice to help developers write better, cleaner, and more efficient code...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>How to Start a Career in Web Development</h2>
+    <p>A complete roadmap for beginners who want to enter the world of frontend or backend development...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>10 Best Chrome Extensions for Students</h2>
+    <p>Boost productivity and learning with these powerful tools every student should use...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>Why Cybersecurity Skills Are Essential in 2025</h2>
+    <p>Cyberattacks are increasing worldwide. Here’s why cybersecurity experts are in high demand...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>The Future of Remote Work</h2>
+    <p>More companies are shifting to hybrid and remote work models. Here’s what employees should know...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>How to Build Your First Mobile App</h2>
+    <p>A simple guide for aspiring mobile developers to start creating Android and iOS apps...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>Top 7 Passive Income Ideas for Tech People</h2>
+    <p>From blogging to automation tools, here are great ways tech-savvy people can generate income...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>What Is Cloud Computing? A Beginner’s Guide</h2>
+    <p>Learn the basics of cloud platforms like AWS, Azure, and Google Cloud and how they power the internet...</p>
+    <a href="#">Read full blog</a>
+  </div>
+
+  <div class="card">
+    <h2>How to Learn JavaScript Faster</h2>
+    <p>JavaScript is essential for web development. Here’s a step-by-step method to master it quickly...</p>
+    <a href="#">Read full blog</a>
+  </div>
+</div>
+
+<script>
+  async function loadNews() {
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = '<div class="loader">Loading news...</div>';
+
+    try {
+      const API_KEY = 'demo';
+      const url = `https://gnews.io/api/v4/top-headlines?token=${API_KEY}&lang=en&max=10`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      container.innerHTML = '';
+
+      data.articles.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h2>${article.title}</h2>
+          <p>${article.description || ''}</p>
+          <a href="${article.url}" target="_blank">Read more</a>
+        `;
+        container.appendChild(card);
+      });
+    } 
+
+  loadNews();
+  setInterval(loadNews, 60000);
+</script>
+
+<footer>
+  <p>&copy; 2025 Trending News. All rights reserved.</p>
+  <p>
+    <a href="#">About</a> |
+    <a href="#">Contact</a> |
+    <a href="#">Privacy Policy</a>
+  </p>
+</footer>
+
+</body>
+</html>
