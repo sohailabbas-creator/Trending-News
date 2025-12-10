@@ -4,37 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trending News</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f4f4f4; line-height: 1.6; }
-    header { background: #111; color: #fff; padding: 20px; text-align: center; }
-    h1 { margin: 0; font-size: 2rem; }
-
-    .news-container { max-width: 1200px; margin: 20px auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-
-    .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
-    .card h2 { font-size: 1.2rem; margin-bottom: 10px; }
-    .card p { flex-grow: 1; }
-    .card a { text-decoration: none; color: #0077cc; margin-top: 10px; display: inline-block; }
-    .card a:hover { text-decoration: underline; }
-
-    .loader { text-align: center; font-size: 18px; padding: 20px; }
-
-    footer { background:#111; color:#fff; text-align:center; padding:20px; margin-top:20px; }
-    footer a { color:#fff; margin:0 10px; text-decoration:none; }
-    footer a:hover { text-decoration:underline; }
-
-    @media (max-width: 768px) {
-      header h1 { font-size: 1.5rem; }
-      .card h2 { font-size: 1rem; }
-    }
-
-    @media (max-width: 480px) {
-      .news-container { padding: 5px; grid-template-columns: 1fr; }
-      .card { padding: 15px; }
-      .card h2 { font-size: 0.95rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -42,8 +12,7 @@
   <h1>Trending News</h1>
 </header>
 
-
-<div class="news-container">
+<div class="news-container" id="newsContainerStatic">
   <h2 style="grid-column: 1 / -1; font-size: 1.5rem; margin-bottom: 15px;">Latest Blogs</h2>
 
   <div class="card">
@@ -107,34 +76,9 @@
   </div>
 </div>
 
-<script>
-  async function loadNews() {
-    const container = document.getElementById('newsContainer');
-    container.innerHTML = '<div class="loader">Loading news...</div>';
+<div id="newsContainer"></div>
 
-    try {
-      const API_KEY = 'demo';
-      const url = `https://gnews.io/api/v4/top-headlines?token=${API_KEY}&lang=en&max=10`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      container.innerHTML = '';
-
-      data.articles.forEach(article => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h2>${article.title}</h2>
-          <p>${article.description || ''}</p>
-          <a href="${article.url}" target="_blank">Read more</a>
-        `;
-        container.appendChild(card);
-      });
-    } 
-
-  loadNews();
-  setInterval(loadNews, 60000);
-</script>
+<script src="script.js"></script>
 
 <footer>
   <p>&copy; 2025 Trending News. All rights reserved.</p>
