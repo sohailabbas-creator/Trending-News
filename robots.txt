@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api.php
-Sitemap: https://YOURDOMAIN.com/sitemap.xml
