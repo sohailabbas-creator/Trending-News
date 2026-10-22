@@ -1,0 +1,75 @@
+<div class="panel">
+  <div class="seg" role="radiogroup" aria-label="Unit system">
+    <button class="seg-btn is-on" data-u="metric" role="radio" aria-checked="true">Metric (cm / kg)</button>
+    <button class="seg-btn" data-u="imperial" role="radio" aria-checked="false">Imperial (ft, in / lb)</button>
+  </div>
+
+  <div id="bmi-metric">
+    <div class="row">
+      <div class="field"><label for="bmi-cm">Height (cm)</label><input type="number" id="bmi-cm" value="175" min="50" max="250" step="0.1" inputmode="decimal"></div>
+      <div class="field"><label for="bmi-kg">Weight (kg)</label><input type="number" id="bmi-kg" value="72" min="10" max="400" step="0.1" inputmode="decimal"></div>
+    </div>
+  </div>
+  <div id="bmi-imperial" hidden>
+    <div class="row-3">
+      <div class="field"><label for="bmi-ft">Height (ft)</label><input type="number" id="bmi-ft" value="5" min="1" max="8" step="1" inputmode="numeric"></div>
+      <div class="field"><label for="bmi-in">Height (in)</label><input type="number" id="bmi-in" value="9" min="0" max="11" step="0.5" inputmode="decimal"></div>
+      <div class="field"><label for="bmi-lb">Weight (lb)</label><input type="number" id="bmi-lb" value="159" min="20" max="900" step="0.1" inputmode="decimal"></div>
+    </div>
+  </div>
+
+  <div class="out out-lg" id="bmi-result" aria-live="polite"></div>
+  <div class="bmi-scale" id="bmi-scale" hidden>
+    <div class="bmi-bar"><span style="flex:18.5;background:#60a5fa"></span><span style="flex:6.5;background:#34d399"></span>
+      <span style="flex:5;background:#fbbf24"></span><span style="flex:20;background:#f87171"></span>
+      <i id="bmi-marker" title="Your BMI"></i></div>
+    <div class="bmi-legend"><span>18.5</span><span>25</span><span>30</span></div>
+  </div>
+  <p class="hint" id="bmi-note"></p>
+  <p class="status" id="bmi-status" role="status"></p>
+</div>
+
+<script>
+(function(){
+  var unit='metric',status=document.getElementById('bmi-status');
+  function v(id){var x=parseFloat(document.getElementById(id).value);return isNaN(x)?0:x;}
+  function calc(){
+    var cm,kg;
+    if(unit==='metric'){cm=v('bmi-cm');kg=v('bmi-kg');}
+    else{cm=(v('bmi-ft')*12+v('bmi-in'))*2.54;kg=v('bmi-lb')*0.45359237;}
+    if(!cm||!kg){
+      document.getElementById('bmi-result').textContent='Enter a height and weight to see your BMI.';
+      return;
+    }
+    var h=cm/100,bmi=kg/(h*h),label,color;
+    if(bmi<18.5){label='Underweight';color='#2563eb';}
+    else if(bmi<25){label='Healthy weight';color='#059669';}
+    else if(bmi<30){label='Overweight';color='#d97706';}
+    else{label='Obese';color='#dc2626';}
+    var lo=18.5*h*h,hi=24.9*h*h;
+    var toUnit=function(k){return unit==='metric'?k.toFixed(1)+' kg':(k/0.45359237).toFixed(1)+' lb';};
+    document.getElementById('bmi-result').innerHTML=
+      '<b style="color:'+color+'">BMI '+bmi.toFixed(1)+' — '+label+'</b>'+
+      '<span class="muted"> · healthy weight range for '+cm.toFixed(0)+' cm is '+toUnit(lo)+' to '+toUnit(hi)+'</span>';
+    document.getElementById('bmi-scale').hidden=false;
+    var pct=Math.max(0,Math.min(100,(bmi-14)/(42-14)*100));
+    document.getElementById('bmi-marker').style.left=pct+'%';
+    document.getElementById('bmi-note').textContent=
+      'BMI is a screening tool. It cannot distinguish muscle from fat, so athletes often read as overweight. It is not valid for children and some health bodies use lower thresholds for people of South Asian and East Asian descent.';
+    status.className='status';
+  }
+  document.querySelectorAll('.seg-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      unit=b.dataset.u;
+      document.querySelectorAll('.seg-btn').forEach(function(x){
+        x.classList.toggle('is-on',x===b);x.setAttribute('aria-checked',String(x===b));});
+      document.getElementById('bmi-metric').hidden=(unit!=='metric');
+      document.getElementById('bmi-imperial').hidden=(unit!=='imperial');
+      calc();
+    });
+  });
+  ['bmi-cm','bmi-kg','bmi-ft','bmi-in','bmi-lb'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>

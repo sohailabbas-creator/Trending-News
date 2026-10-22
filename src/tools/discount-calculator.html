@@ -1,0 +1,86 @@
+<div class="panel">
+  <div class="seg" role="radiogroup" aria-label="Discount mode">
+    <button class="seg-btn is-on" data-m="forward" role="radio" aria-checked="true">Price after discount</button>
+    <button class="seg-btn" data-m="reverse" role="radio" aria-checked="false">Original price from sale price</button>
+  </div>
+
+  <div id="d-fwd">
+    <div class="row">
+      <div class="field"><label for="d-price">Original price</label><input type="number" id="d-price" value="80" min="0" step="0.01" inputmode="decimal"></div>
+      <div class="field"><label for="d-pct">Discount (%)</label><input type="number" id="d-pct" value="30" min="0" max="100" step="0.1" inputmode="decimal"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="d-pct2">Second stacked discount (%) <span class="muted">optional</span></label><input type="number" id="d-pct2" value="0" min="0" max="100" step="0.1" inputmode="decimal"></div>
+      <div class="field"><label for="d-tax">Sales tax / VAT added at checkout (%)</label><input type="number" id="d-tax" value="0" min="0" max="100" step="0.1" inputmode="decimal"></div>
+    </div>
+  </div>
+
+  <div id="d-rev" hidden>
+    <div class="row">
+      <div class="field"><label for="d-sale">Sale price you paid</label><input type="number" id="d-sale" value="60" min="0" step="0.01" inputmode="decimal"></div>
+      <div class="field"><label for="d-pct3">Discount that was applied (%)</label><input type="number" id="d-pct3" value="25" min="0" max="99" step="0.1" inputmode="decimal"></div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><b id="d-final">—</b><span id="d-final-l">You pay</span></div>
+    <div class="stat"><b id="d-save">—</b><span>You save</span></div>
+    <div class="stat"><b id="d-eff">—</b><span>Effective % off</span></div>
+    <div class="stat"><b id="d-orig">—</b><span>Original price</span></div>
+  </div>
+  <div class="out" id="d-summary" aria-live="polite"></div>
+  <div class="btns"><button class="btn btn-primary" id="d-copy">Copy summary</button></div>
+  <p class="status" id="d-status" role="status"></p>
+</div>
+
+<script>
+(function(){
+  var mode='forward',status=document.getElementById('d-status');
+  var m=function(n){return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});};
+  function val(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
+  function calc(){
+    var final,save,eff,orig,txt;
+    if(mode==='forward'){
+      var p=val('d-price'),p1=val('d-pct'),p2=val('d-pct2'),tax=val('d-tax');
+      var after1=p*(1-p1/100), after2=after1*(1-p2/100);
+      final=after2*(1+tax/100); save=p-after2;
+      eff=p>0?save/p*100:0; orig=p;
+      txt='Original '+m(p)+' → after '+p1+'% off '+m(after1)+
+          (p2?(' → after a further '+p2+'% off '+m(after2)):'')+
+          (tax?(' → plus '+tax+'% tax '+m(final)):'')+'. Total saving '+m(save)+' ('+eff.toFixed(2)+'% of the original).';
+      document.getElementById('d-final-l').textContent=tax?'You pay (incl. tax)':'You pay';
+    } else {
+      var sale=val('d-sale'),pc=val('d-pct3');
+      orig=pc>=100?sale:sale/(1-pc/100);
+      final=sale; save=orig-sale; eff=pc;
+      txt='A sale price of '+m(sale)+' at '+pc+'% off came from an original '+m(orig)+'. Saving '+m(save)+
+          '. (Adding '+pc+'% to the sale price would give '+m(sale*(1+pc/100))+', which is wrong.)';
+      document.getElementById('d-final-l').textContent='Sale price';
+    }
+    document.getElementById('d-final').textContent=m(final);
+    document.getElementById('d-save').textContent=m(save);
+    document.getElementById('d-eff').textContent=eff.toFixed(2)+'%';
+    document.getElementById('d-orig').textContent=m(orig);
+    document.getElementById('d-summary').textContent=txt;
+  }
+  document.querySelectorAll('.seg-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      mode=b.dataset.m;
+      document.querySelectorAll('.seg-btn').forEach(function(x){
+        x.classList.toggle('is-on',x===b);x.setAttribute('aria-checked',String(x===b));});
+      document.getElementById('d-fwd').hidden=(mode!=='forward');
+      document.getElementById('d-rev').hidden=(mode!=='reverse');
+      calc();
+    });
+  });
+  ['d-price','d-pct','d-pct2','d-tax','d-sale','d-pct3'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',calc);
+  });
+  document.getElementById('d-copy').addEventListener('click',function(){
+    navigator.clipboard.writeText(document.getElementById('d-summary').textContent).then(function(){
+      status.textContent='Copied.';status.className='status ok show';
+      setTimeout(function(){status.className='status';},1500);});
+  });
+  calc();
+})();
+</script>

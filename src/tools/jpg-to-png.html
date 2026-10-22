@@ -1,0 +1,80 @@
+<div class="panel">
+  <label class="drop" for="jp-files" id="jp-drop">
+    <strong>Choose JPG images</strong> or drag them here<br>
+    <span class="muted small">Batch conversion · lossless PNG output · nothing uploaded</span>
+  </label>
+  <input type="file" id="jp-files" accept="image/jpeg" multiple hidden>
+
+  <div class="btns">
+    <button class="btn btn-primary" id="jp-run" disabled>Convert to PNG</button>
+    <button class="btn" id="jp-clear" disabled>Clear</button>
+  </div>
+  <p class="status" id="jp-status" role="status">No images selected.</p>
+</div>
+
+<div class="panel">
+  <h2 class="panel-h">Results</h2>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th scope="col">File</th><th scope="col">Dimensions</th><th scope="col">JPG size</th><th scope="col">PNG size</th><th scope="col">Download</th></tr></thead>
+    <tbody id="jp-body"><tr><td colspan="5" class="muted">Add JPG files to convert them.</td></tr></tbody>
+  </table></div>
+  <p class="hint">PNG files are usually larger than the original JPEG. That is expected: PNG stores every pixel losslessly.</p>
+</div>
+
+<script>
+(function(){
+  var input=document.getElementById('jp-files'),items=[],status=document.getElementById('jp-status'),
+      runBtn=document.getElementById('jp-run'),clearBtn=document.getElementById('jp-clear'),body=document.getElementById('jp-body');
+  function size(b){return b>1048576?(b/1048576).toFixed(2)+' MB':(b/1024).toFixed(0)+' KB';}
+  input.addEventListener('change',function(e){
+    items=items.concat([].slice.call(e.target.files).filter(function(f){return /jpe?g/i.test(f.type);})
+      .map(function(f){return {file:f,out:null};}));
+    runBtn.disabled=items.length===0;clearBtn.disabled=items.length===0;
+    status.textContent=items.length+' image(s) ready.';status.className='status';input.value='';
+  });
+  ['dragenter','dragover'].forEach(function(ev){
+    document.getElementById('jp-drop').addEventListener(ev,function(e){e.preventDefault();this.classList.add('over');});});
+  ['dragleave','drop'].forEach(function(ev){
+    document.getElementById('jp-drop').addEventListener(ev,function(e){e.preventDefault();this.classList.remove('over');});});
+  document.getElementById('jp-drop').addEventListener('drop',function(e){
+    if(!e.dataTransfer)return;
+    items=items.concat([].slice.call(e.dataTransfer.files).filter(function(f){return /jpe?g/i.test(f.type);})
+      .map(function(f){return {file:f,out:null};}));
+    runBtn.disabled=items.length===0;clearBtn.disabled=items.length===0;});
+  clearBtn.addEventListener('click',function(){items=[];runBtn.disabled=clearBtn.disabled=true;
+    body.innerHTML='<tr><td colspan="5" class="muted">Add JPG files to convert them.</td></tr>';
+    status.textContent='No images selected.';status.className='status';});
+  function convert(item){
+    return new Promise(function(resolve){
+      var img=new Image(),url=URL.createObjectURL(item.file);
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=img.width;c.height=img.height;
+        c.getContext('2d').drawImage(img,0,0);
+        c.toBlob(function(blob){
+          URL.revokeObjectURL(url);
+          item.out={blob:blob,w:img.width,h:img.height,url:URL.createObjectURL(blob)};
+          resolve();
+        },'image/png');
+      };
+      img.onerror=function(){URL.revokeObjectURL(url);item.out=false;resolve();};
+      img.src=url;
+    });
+  }
+  runBtn.addEventListener('click',async function(){
+    runBtn.disabled=true;status.textContent='Converting…';status.className='status show';
+    var rows=[],before=0,after=0;
+    for(var i=0;i<items.length;i++){
+      await convert(items[i]);
+      var it=items[i];
+      if(!it.out){rows.push('<tr><td>'+it.file.name+'</td><td colspan="4" class="bad">Could not read this file</td></tr>');continue;}
+      before+=it.file.size;after+=it.out.blob.size;
+      rows.push('<tr><td>'+it.file.name+'</td><td class="mono small">'+it.out.w+' × '+it.out.h+'</td>'+
+        '<td class="mono">'+size(it.file.size)+'</td><td class="mono">'+size(it.out.blob.size)+'</td>'+
+        '<td><a class="btn btn-sm" download="'+it.file.name.replace(/\.jpe?g$/i,'')+'.png" href="'+it.out.url+'">Download PNG</a></td></tr>');
+    }
+    body.innerHTML=rows.join('');
+    status.textContent='Converted '+items.length+' image(s). Total '+size(before)+' → '+size(after)+'.';
+    status.className='status ok show';runBtn.disabled=false;
+  });
+})();
+</script>

@@ -1,0 +1,87 @@
+<div class="panel">
+  <div class="row-3">
+    <div class="field"><label for="emi-p">Loan amount</label><input type="number" id="emi-p" value="250000" min="0" step="1000" inputmode="decimal"></div>
+    <div class="field"><label for="emi-r">Annual interest rate (%)</label><input type="number" id="emi-r" value="9.5" min="0" step="0.05" inputmode="decimal"></div>
+    <div class="field"><label for="emi-n">Term (years)</label><input type="number" id="emi-n" value="20" min="1" max="50" step="1" inputmode="numeric"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="emi-extra">Extra payment per month (optional)</label><input type="number" id="emi-extra" value="0" min="0" step="10" inputmode="decimal"></div>
+    <div class="field"><label for="emi-fee">Processing fee (optional)</label><input type="number" id="emi-fee" value="0" min="0" step="10" inputmode="decimal"></div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><b id="emi-out">—</b><span>Monthly EMI</span></div>
+    <div class="stat"><b id="emi-int">—</b><span>Total interest</span></div>
+    <div class="stat"><b id="emi-total">—</b><span>Total payable</span></div>
+    <div class="stat"><b id="emi-months">—</b><span>Months</span></div>
+  </div>
+  <div class="out" id="emi-summary" aria-live="polite"></div>
+  <p class="hint" id="emi-extra-note"></p>
+  <p class="status" id="emi-status" role="status"></p>
+</div>
+
+<div class="panel">
+  <h2 class="panel-h">Amortisation schedule <span class="muted small" id="emi-fmt2"></span></h2>
+  <div class="table-wrap table-scroll"><table class="data">
+    <thead><tr><th scope="col">Year</th><th scope="col">Principal paid</th><th scope="col">Interest paid</th><th scope="col">Balance left</th></tr></thead>
+    <tbody id="emi-body"></tbody>
+  </table></div>
+  <p class="hint">Interest is charged on the outstanding balance, which is why early years are mostly interest.</p>
+</div>
+
+<script>
+(function(){
+  var money=function(n){return Math.round(n).toLocaleString();};
+  function calc(){
+    var P=parseFloat(document.getElementById('emi-p').value)||0,
+        r=parseFloat(document.getElementById('emi-r').value)||0,
+        yrs=parseFloat(document.getElementById('emi-n').value)||1,
+        extra=parseFloat(document.getElementById('emi-extra').value)||0,
+        fee=parseFloat(document.getElementById('emi-fee').value)||0;
+    var n=Math.round(yrs*12), rm=r/12/100;
+    var emi=rm===0?P/n:(P*rm*Math.pow(1+rm,n))/(Math.pow(1+rm,n)-1);
+    var total=emi*n, interest=total-P;
+
+    document.getElementById('emi-out').textContent=money(emi);
+    document.getElementById('emi-int').textContent=money(interest);
+    document.getElementById('emi-total').textContent=money(total+fee);
+    document.getElementById('emi-months').textContent=months||n;
+
+    var html='Borrowing '+money(P)+' at '+r+'% over '+n+' months: '+money(emi)+' per month, '+money(interest)+
+             ' of interest in total'+(fee?', plus a '+money(fee)+' fee':'')+'.';
+    document.getElementById('emi-summary').innerHTML=html;
+
+    // schedule
+    var bal=P, rows='', yp=0, yi=0, paidExtra=0, months=0;
+    for(var i=1;i<=n;i++){
+      var ip=bal*rm, pp=emi-ip+extra;
+      if(pp>bal){pp=bal;}
+      bal=bal-pp+0;
+      if(bal<0.5){bal=0;}
+      paidExtra+=(pp-(emi-ip))>0?pp-(emi-ip):0;
+      yp+=pp; yi+=ip; months=i;
+      if(i%12===0||bal<=0){
+        rows+='<tr><td>Year '+Math.ceil(i/12)+'</td><td class="mono">'+money(yp)+'</td><td class="mono">'+money(yi)+
+              '</td><td class="mono">'+money(bal)+'</td></tr>';
+        yp=0;yi=0;
+      }
+      if(bal<=0){break;}
+    }
+    document.getElementById('emi-body').innerHTML=rows;
+
+    var note=document.getElementById('emi-extra-note');
+    if(extra>0&&months<n){
+      var saved=(emi*n)-(emi*months+paidExtra);
+      note.textContent='With '+money(extra)+' extra per month the loan clears in '+months+' months ('+
+        (n-months)+' months sooner), saving roughly '+money(Math.max(0,saved))+' in interest.';
+    } else {
+      note.textContent='';
+    }
+    document.getElementById('emi-status').className='status';
+  }
+  ['emi-p','emi-r','emi-n','emi-extra','emi-fee'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',calc);
+  });
+  calc();
+})();
+</script>

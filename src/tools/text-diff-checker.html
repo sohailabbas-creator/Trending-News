@@ -1,0 +1,83 @@
+<div class="row">
+  <div class="panel">
+    <label for="diff-a">Original text</label>
+    <textarea id="diff-a" rows="7" class="mono">Shipping is free on orders over 50.
+Returns accepted within 30 days.
+Support hours: 9am to 5pm.
+Contact support for help.</textarea>
+  </div>
+  <div class="panel">
+    <label for="diff-b">Revised text</label>
+    <textarea id="diff-b" rows="7" class="mono">Shipping is free on orders over 75.
+Returns accepted within 30 days.
+Support hours: 8am to 6pm.
+Contact our support team for help.</textarea>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="btns" style="margin-top:0">
+    <button class="btn btn-primary" id="diff-run">Compare texts</button>
+    <label class="check"><input type="checkbox" id="diff-case"> Ignore case</label>
+    <label class="check"><input type="checkbox" id="diff-space"> Ignore whitespace</label>
+    <button class="btn" id="diff-copy">Copy diff</button>
+  </div>
+  <div class="inline-stats">
+    <span><b class="ok" id="diff-added">0</b> added</span>
+    <span><b class="bad" id="diff-removed">0</b> removed</span>
+    <span><b id="diff-same">0</b> unchanged</span>
+    <span>Similarity <b id="diff-sim">—</b></span>
+  </div>
+  <div class="out diff-out" id="diff-out" aria-live="polite"></div>
+  <p class="status" id="diff-status" role="status"></p>
+</div>
+
+<script>
+(function(){
+  var status=document.getElementById('diff-status');
+  function norm(s){
+    if(document.getElementById('diff-case').checked)s=s.toLowerCase();
+    if(document.getElementById('diff-space').checked)s=s.replace(/\s+/g,' ').trim();
+    return s;
+  }
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')||'&nbsp;';}
+  function run(){
+    var a=document.getElementById('diff-a').value.split('\n').slice(0,1000),
+        b=document.getElementById('diff-b').value.split('\n').slice(0,1000),
+        an=a.map(norm),bn=b.map(norm),n=an.length,m=bn.length;
+    var dp=[],i,j;
+    for(i=0;i<=n;i++){dp.push(new Uint16Array(m+1));}
+    for(i=n-1;i>=0;i--){for(j=m-1;j>=0;j--){
+      dp[i][j]=an[i]===bn[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);}}
+    var html=[],added=0,removed=0,same=0,x=0,y=0;
+    while(x<n&&y<m){
+      if(an[x]===bn[y]){html.push('<span class="diff-line same">  '+esc(b[y])+'</span>');x++;y++;same++;}
+      else if(dp[x+1][y]>=dp[x][y+1]){html.push('<span class="diff-line del">− '+esc(a[x])+'</span>');x++;removed++;}
+      else{html.push('<span class="diff-line add">+ '+esc(b[y])+'</span>');y++;added++;}
+    }
+    while(x<n){html.push('<span class="diff-line del">− '+esc(a[x])+'</span>');x++;removed++;}
+    while(y<m){html.push('<span class="diff-line add">+ '+esc(b[y])+'</span>');y++;added++;}
+    document.getElementById('diff-out').innerHTML=html.join('')||'<span class="muted">Both boxes are empty.</span>';
+    document.getElementById('diff-added').textContent=added;
+    document.getElementById('diff-removed').textContent=removed;
+    document.getElementById('diff-same').textContent=same;
+    var total=same+added+removed;
+    document.getElementById('diff-sim').textContent=total?Math.round(same/total*100)+'%':'—';
+    status.textContent=added||removed?added+' line(s) added, '+removed+' removed.':'The two texts are identical.';
+    status.className='status '+((added||removed)?'':'ok')+' show';
+  }
+  document.getElementById('diff-run').addEventListener('click',run);
+  document.getElementById('diff-case').addEventListener('change',run);
+  document.getElementById('diff-space').addEventListener('change',run);
+  document.getElementById('diff-copy').addEventListener('click',function(){
+    var lines=[];
+    [].forEach.call(document.querySelectorAll('#diff-out .diff-line'),function(el){
+      var t=el.textContent.slice(2);
+      lines.push(el.classList.contains('add')?'+ '+t:el.classList.contains('del')?'- '+t:'  '+t);
+    });
+    navigator.clipboard.writeText(lines.join('\n')).then(function(){
+      status.textContent='Copied as unified diff.';status.className='status ok show';});
+  });
+  run();
+})();
+</script>

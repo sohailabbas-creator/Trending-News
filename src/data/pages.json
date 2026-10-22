@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "about",
+    "h1": "About SohailAbbas Tools",
+    "meta_title": "About This Site — Who Builds These Tools and Why",
+    "meta_description": "Why sohailabbas.site exists, how the tools are built, what is verified before publishing, and what the site deliberately refuses to do with your data.",
+    "fragment": "pages/about.html",
+    "keywords": [
+      "about sohailabbas tools",
+      "free tools site",
+      "browser based tools"
+    ]
+  },
+  {
+    "slug": "contact",
+    "h1": "Contact",
+    "meta_title": "Contact — Report a Bug or Suggest a New Tool Online",
+    "meta_description": "How to reach the person who builds these tools: report a wrong result, suggest a calculator, or ask about a formula. One email address, no ticket system.",
+    "fragment": "pages/contact.html",
+    "keywords": [
+      "contact",
+      "report a bug",
+      "suggest a tool"
+    ]
+  },
+  {
+    "slug": "privacy-policy",
+    "h1": "Privacy policy",
+    "meta_title": "Privacy Policy — No Cookies, Trackers or File Uploads",
+    "meta_description": "What this site does and does not collect. No cookies, no analytics, no advertising trackers, and files you open in the tools are never uploaded or stored.",
+    "fragment": "pages/privacy.html",
+    "keywords": [
+      "privacy policy",
+      "no tracking",
+      "client side processing"
+    ]
+  },
+  {
+    "slug": "terms",
+    "h1": "Terms of use",
+    "meta_title": "Terms of Use — Free Tools With No Warranty or Advice",
+    "meta_description": "The terms that apply when you use the free tools on sohailabbas.site: informational results, no warranty, no financial, tax or medical advice, and acceptable use.",
+    "fragment": "pages/terms.html",
+    "keywords": [
+      "terms of use",
+      "disclaimer",
+      "free tools terms"
+    ]
+  }
+]

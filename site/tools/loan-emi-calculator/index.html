@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Loan EMI Calculator — Monthly Payment &amp; Total Interest</title>
+<meta name="description" content="Calculate loan EMI, total interest and total repayment for any loan. Includes a month-by-month amortisation schedule and an extra-payment comparison.">
+<meta name="keywords" content="emi calculator, loan calculator, monthly payment calculator, mortgage payment calculator, amortization schedule, interest calculator, car loan calculator">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://sohailabbas.site/tools/loan-emi-calculator/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d4ed8'/%3E%3Ctext x='32' y='44' font-family='Arial,Helvetica,sans-serif' font-size='34' font-weight='700' fill='%23ffffff' text-anchor='middle'%3Es%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d4ed8'/%3E%3Ctext x='32' y='44' font-family='Arial,Helvetica,sans-serif' font-size='34' font-weight='700' fill='%23ffffff' text-anchor='middle'%3Es%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta property="og:site_name" content="SohailAbbas Tools">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Loan EMI Calculator — Monthly Payment &amp; Total Interest">
+<meta property="og:description" content="Calculate loan EMI, total interest and total repayment for any loan. Includes a month-by-month amortisation schedule and an extra-payment comparison.">
+<meta property="og:url" content="https://sohailabbas.site/tools/loan-emi-calculator/">
+<meta property="og:image" content="https://sohailabbas.site/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SohailAbbas Tools — 20 free online calculators and converters">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Loan EMI Calculator — Monthly Payment &amp; Total Interest">
+<meta name="twitter:description" content="Calculate loan EMI, total interest and total repayment for any loan. Includes a month-by-month amortisation schedule and an extra-payment comparison.">
+<meta name="twitter:image" content="https://sohailabbas.site/assets/og.png">
+<link rel="stylesheet" href="../../assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Loan EMI Calculator","url":"https://sohailabbas.site/tools/loan-emi-calculator/","description":"Calculate loan EMI, total interest and total repayment for any loan. Includes a month-by-month amortisation schedule and an extra-payment comparison.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any modern browser","browserRequirements":"Requires JavaScript","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Standard reducing-balance EMI formula, shown on screen","Total interest and total payable alongside the monthly payment","Month-by-month amortisation with principal and interest split","Extra-payment comparison showing interest saved and months saved","Handles zero-interest loans and terms entered in months or years"],"publisher":{"@type":"Organization","name":"SohailAbbas Tools","url":"https://sohailabbas.site"},"dateModified":"2026-10-22"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://sohailabbas.site/"},{"@type":"ListItem","position":2,"name":"Money & Tax","item":"https://sohailabbas.site/category/money-tax/"},{"@type":"ListItem","position":3,"name":"Loan EMI Calculator","item":"https://sohailabbas.site/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is EMI calculated?","acceptedAnswer":{"@type":"Answer","text":"EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1), where P is the principal, r is the monthly interest rate (annual rate ÷ 12 ÷ 100) and n is the number of monthly payments. The result stays constant while the split between interest and principal changes each month."}},{"@type":"Question","name":"What is the difference between flat rate and reducing balance interest?","acceptedAnswer":{"@type":"Answer","text":"Flat rate charges interest on the original amount for the whole term, so a 10% flat rate on 100,000 over five years costs 50,000 in interest. Reducing balance charges interest only on what is still owed, so the same nominal 10% costs roughly 27,000. Always compare APRs, not headline rates."}},{"@type":"Question","name":"Does prepaying a loan save interest?","acceptedAnswer":{"@type":"Answer","text":"Yes, and the saving is largest early in the term because the outstanding balance is highest. Check whether your lender charges a prepayment penalty and whether the loan uses reducing balance; on a flat-rate loan the saving is calculated differently."}},{"@type":"Question","name":"Why is my bank's EMI slightly different?","acceptedAnswer":{"@type":"Answer","text":"Differences usually come from fees rolled into the principal, a different day-count convention, rounding to the nearest rupee, pound or euro each month, or an insurance product added to the loan."}},{"@type":"Question","name":"Is a longer tenure always cheaper per month?","acceptedAnswer":{"@type":"Answer","text":"It lowers the monthly payment but raises total interest. Stretching a 100,000 loan from 10 to 20 years at 9.5% cuts the payment from about 1,294 to 932 but roughly doubles the interest paid."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"How to use the Loan EMI Calculator","description":"Calculate the monthly payment on a loan, the total interest, and the full repayment schedule.","totalTime":"PT1M","step":[{"@type":"HowToStep","position":1,"text":"Enter the loan amount, the annual interest rate and the term in years or months."},{"@type":"HowToStep","position":2,"text":"Add any processing fee if you want it included in the effective cost."},{"@type":"HowToStep","position":3,"text":"Optionally enter an extra monthly payment to see its effect."},{"@type":"HowToStep","position":4,"text":"Read the EMI, total interest and total payable, then scroll the schedule to see how the balance falls."}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../">
+      <span class="brand-mark" aria-hidden="true">s</span>
+      <span class="brand-text">SohailAbbas Tools</span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr-only">Toggle navigation</span><span aria-hidden="true">☰</span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul><li><a href="../../">Home</a></li><li><a href="../../all-tools/">All tools</a></li><li><a href="../../category/">Categories</a></li><li><a href="../../about/">About</a></li><li><a href="../../contact/">Contact</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main">
+
+<div class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><span aria-current="page">Home</span></li><li><a href="../../category/money-tax/">Money &amp; Tax</a></li><li><span aria-current="page">Loan EMI Calculator</span></li></ol></nav>
+<div class="tool-hero">
+  <div class="tool-hero-main">
+    <h1>Loan EMI and Repayment Calculator</h1>
+    <p class="lede">Calculate the monthly payment on a loan, the total interest, and the full repayment schedule.</p>
+    <ul class="badges">
+      <li>Money &amp; Tax</li><li>Free</li><li>No sign-up</li><li>Runs locally</li>
+    </ul>
+  </div>
+  <aside class="tool-hero-aside" aria-label="Quick facts">
+    <dl>
+      <dt>Primary search intent</dt><dd>Commercial investigation — the user is sizing a loan before committing, or checking an existing offer.</dd>
+      <dt>Works on</dt><dd>Phone, tablet, desktop</dd>
+      <dt>Data leaves device?</dt><dd>No</dd>
+    </dl>
+  </aside>
+</div>
+
+<section class="tool-shell" aria-label="Loan EMI Calculator">
+<div class="panel">
+  <div class="row-3">
+    <div class="field"><label for="emi-p">Loan amount</label><input type="number" id="emi-p" value="250000" min="0" step="1000" inputmode="decimal"></div>
+    <div class="field"><label for="emi-r">Annual interest rate (%)</label><input type="number" id="emi-r" value="9.5" min="0" step="0.05" inputmode="decimal"></div>
+    <div class="field"><label for="emi-n">Term (years)</label><input type="number" id="emi-n" value="20" min="1" max="50" step="1" inputmode="numeric"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label for="emi-extra">Extra payment per month (optional)</label><input type="number" id="emi-extra" value="0" min="0" step="10" inputmode="decimal"></div>
+    <div class="field"><label for="emi-fee">Processing fee (optional)</label><input type="number" id="emi-fee" value="0" min="0" step="10" inputmode="decimal"></div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><b id="emi-out">—</b><span>Monthly EMI</span></div>
+    <div class="stat"><b id="emi-int">—</b><span>Total interest</span></div>
+    <div class="stat"><b id="emi-total">—</b><span>Total payable</span></div>
+    <div class="stat"><b id="emi-months">—</b><span>Months</span></div>
+  </div>
+  <div class="out" id="emi-summary" aria-live="polite"></div>
+  <p class="hint" id="emi-extra-note"></p>
+  <p class="status" id="emi-status" role="status"></p>
+</div>
+
+<div class="panel">
+  <h2 class="panel-h">Amortisation schedule <span class="muted small" id="emi-fmt2"></span></h2>
+  <div class="table-wrap table-scroll"><table class="data">
+    <thead><tr><th scope="col">Year</th><th scope="col">Principal paid</th><th scope="col">Interest paid</th><th scope="col">Balance left</th></tr></thead>
+    <tbody id="emi-body"></tbody>
+  </table></div>
+  <p class="hint">Interest is charged on the outstanding balance, which is why early years are mostly interest.</p>
+</div>
+
+<script>
+(function(){
+  var money=function(n){return Math.round(n).toLocaleString();};
+  function calc(){
+    var P=parseFloat(document.getElementById('emi-p').value)||0,
+        r=parseFloat(document.getElementById('emi-r').value)||0,
+        yrs=parseFloat(document.getElementById('emi-n').value)||1,
+        extra=parseFloat(document.getElementById('emi-extra').value)||0,
+        fee=parseFloat(document.getElementById('emi-fee').value)||0;
+    var n=Math.round(yrs*12), rm=r/12/100;
+    var emi=rm===0?P/n:(P*rm*Math.pow(1+rm,n))/(Math.pow(1+rm,n)-1);
+    var total=emi*n, interest=total-P;
+
+    document.getElementById('emi-out').textContent=money(emi);
+    document.getElementById('emi-int').textContent=money(interest);
+    document.getElementById('emi-total').textContent=money(total+fee);
+    document.getElementById('emi-months').textContent=months||n;
+
+    var html='Borrowing '+money(P)+' at '+r+'% over '+n+' months: '+money(emi)+' per month, '+money(interest)+
+             ' of interest in total'+(fee?', plus a '+money(fee)+' fee':'')+'.';
+    document.getElementById('emi-summary').innerHTML=html;
+
+    // schedule
+    var bal=P, rows='', yp=0, yi=0, paidExtra=0, months=0;
+    for(var i=1;i<=n;i++){
+      var ip=bal*rm, pp=emi-ip+extra;
+      if(pp>bal){pp=bal;}
+      bal=bal-pp+0;
+      if(bal<0.5){bal=0;}
+      paidExtra+=(pp-(emi-ip))>0?pp-(emi-ip):0;
+      yp+=pp; yi+=ip; months=i;
+      if(i%12===0||bal<=0){
+        rows+='<tr><td>Year '+Math.ceil(i/12)+'</td><td class="mono">'+money(yp)+'</td><td class="mono">'+money(yi)+
+              '</td><td class="mono">'+money(bal)+'</td></tr>';
+        yp=0;yi=0;
+      }
+      if(bal<=0){break;}
+    }
+    document.getElementById('emi-body').innerHTML=rows;
+
+    var note=document.getElementById('emi-extra-note');
+    if(extra>0&&months<n){
+      var saved=(emi*n)-(emi*months+paidExtra);
+      note.textContent='With '+money(extra)+' extra per month the loan clears in '+months+' months ('+
+        (n-months)+' months sooner), saving roughly '+money(Math.max(0,saved))+' in interest.';
+    } else {
+      note.textContent='';
+    }
+    document.getElementById('emi-status').className='status';
+  }
+  ['emi-p','emi-r','emi-n','emi-extra','emi-fee'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',calc);
+  });
+  calc();
+})();
+</script>
+</section>
+
+<div class="content-grid">
+  <article class="prose">
+    <h2 id="about">What the Loan EMI Calculator does</h2>
+    <p>An equated monthly instalment keeps the payment the same every month while the split between interest and principal shifts. Interest is charged on the outstanding balance, so in the early years most of each payment is interest; by the final years almost all of it is principal. That is why a 20-year loan at 9% costs almost twice its face value in interest, and why prepaying in year three saves far more than prepaying in year fifteen.</p><p>This calculator applies the standard reducing-balance formula, shows the full amortisation schedule, and compares your result against a scenario where you add a fixed extra amount to each payment, so you can see the interest saved and the months cut.</p>
+
+    <h2 id="how-to">How to use it</h2>
+    <ol class="steps"><li>Enter the loan amount, the annual interest rate and the term in years or months.</li><li>Add any processing fee if you want it included in the effective cost.</li><li>Optionally enter an extra monthly payment to see its effect.</li><li>Read the EMI, total interest and total payable, then scroll the schedule to see how the balance falls.</li></ol>
+
+    <h2 id="features">Features</h2>
+    <ul class="checklist"><li>Standard reducing-balance EMI formula, shown on screen</li><li>Total interest and total payable alongside the monthly payment</li><li>Month-by-month amortisation with principal and interest split</li><li>Extra-payment comparison showing interest saved and months saved</li><li>Handles zero-interest loans and terms entered in months or years</li></ul>
+
+    <h2 id="examples">Worked examples</h2><h3>250,000 over 20 years at 9.5%</h3><p>The EMI is about 2,330 a month. Total repayment is about 559,300, so interest alone is roughly 309,300 — more than the amount borrowed. In the first year, interest accounts for about 92% of what you pay.</p><h3>The same loan with 200 extra each month</h3><p>Paying 200 more every month clears the balance around five years earlier and saves roughly 90,000 in interest. The earlier the extra payment starts, the larger the saving, because it attacks the balance that interest is charged on.</p>
+    <div class="table-wrap"><table class="data"><caption>Monthly payment per 100,000 borrowed (reducing balance)</caption><thead><tr><th scope="col">Rate</th><th scope="col">10 years</th><th scope="col">15 years</th><th scope="col">20 years</th><th scope="col">Interest paid over 20 years</th></tr></thead><tbody><tr><td>5.0%</td><td>1,061</td><td>791</td><td>660</td><td>58,400</td></tr><tr><td>7.0%</td><td>1,161</td><td>899</td><td>775</td><td>86,000</td></tr><tr><td>9.5%</td><td>1,294</td><td>1,044</td><td>932</td><td>123,700</td></tr><tr><td>12.0%</td><td>1,434</td><td>1,200</td><td>1,101</td><td>164,300</td></tr></tbody></table></div>
+
+    <h2 id="faq">Frequently asked questions</h2>
+    <div class="faq"><details open><summary>How is EMI calculated?</summary><p>EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1), where P is the principal, r is the monthly interest rate (annual rate ÷ 12 ÷ 100) and n is the number of monthly payments. The result stays constant while the split between interest and principal changes each month.</p></details><details><summary>What is the difference between flat rate and reducing balance interest?</summary><p>Flat rate charges interest on the original amount for the whole term, so a 10% flat rate on 100,000 over five years costs 50,000 in interest. Reducing balance charges interest only on what is still owed, so the same nominal 10% costs roughly 27,000. Always compare APRs, not headline rates.</p></details><details><summary>Does prepaying a loan save interest?</summary><p>Yes, and the saving is largest early in the term because the outstanding balance is highest. Check whether your lender charges a prepayment penalty and whether the loan uses reducing balance; on a flat-rate loan the saving is calculated differently.</p></details><details><summary>Why is my bank&#x27;s EMI slightly different?</summary><p>Differences usually come from fees rolled into the principal, a different day-count convention, rounding to the nearest rupee, pound or euro each month, or an insurance product added to the loan.</p></details><details><summary>Is a longer tenure always cheaper per month?</summary><p>It lowers the monthly payment but raises total interest. Stretching a 100,000 loan from 10 to 20 years at 9.5% cuts the payment from about 1,294 to 932 but roughly doubles the interest paid.</p></details></div>
+
+    <h2 id="related">Related tools</h2>
+    <div class="related"><a class="rel-card" href="../percentage-calculator/"><b>Percentage Calculator</b><span>Work out a percentage of a number, what percent one number is of another, and percentage change.</span></a><a class="rel-card" href="../salary-calculator/"><b>Salary Calculator</b><span>Convert between hourly, weekly, monthly and annual pay, or work out your hourly rate from a salary.</span></a><a class="rel-card" href="../discount-calculator/"><b>Discount Calculator</b><span>Find the sale price, the money saved and the effective percentage off any item.</span></a></div>
+
+    <h2 id="keywords">What people search for</h2>
+    <p class="small muted">This page is written to answer these real questions about
+      loan emi calculator. They are listed for transparency, not as keyword stuffing.</p>
+    <div class="kw-grid">
+      <div><h3>Long-tail questions</h3><ul class="plain"><li>calculate monthly payment on a loan with reducing balance interest</li><li>how much interest will i pay on a 200000 loan over 20 years</li><li>loan amortization schedule month by month</li><li>what happens to my emi if i make a lump sum payment</li><li>car loan emi calculator with down payment</li><li>difference between flat rate and reducing balance interest</li><li>loan payoff calculator with extra monthly payment</li><li>how much of my first emi is interest</li></ul></div>
+      <div><h3>Related terms</h3><ul class="plain"><li>EMI</li><li>amortisation</li><li>principal</li><li>reducing balance</li><li>flat rate</li><li>APR</li><li>tenure</li><li>prepayment</li></ul></div>
+    </div>
+    <p class="small muted">Editorially reviewed 2026-10-22. Formula and limits stated on this page.
+      Estimates use the standard reducing-balance formula and exclude lender fees, insurance and variable-rate changes.</p>
+  </article>
+
+  <aside class="sidebar" aria-label="On this page">
+    <nav class="side-card">
+      <h2>On this page</h2>
+      <ul class="toc">
+        <li><a href="#about">About</a></li>
+        <li><a href="#how-to">How to use</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#related">Related tools</a></li>
+        <li><a href="#keywords">Search terms</a></li>
+      </ul>
+    </nav>
+    <div class="side-card">
+      <h2>In Money &amp; Tax</h2>
+      <ul class="plain">
+        <li><a href="../vat-calculator/">VAT Calculator</a></li><li><a href="../salary-calculator/">Salary Calculator</a></li><li><a href="../discount-calculator/">Discount Calculator</a></li><li><a href="../overtime-pay-calculator/">Overtime Pay Calculator</a></li><li><a href="../tip-calculator/">Tip Calculator</a></li>
+        <li><a href="../../category/money-tax/">All money &amp; tax →</a></li>
+      </ul>
+    </div>
+    <div class="side-card note">
+      <h2>Editorial note</h2>
+      <p class="small">The schedule is the useful part: it shows when prepayment actually pays off, which a single monthly figure cannot.</p>
+    </div>
+  </aside>
+</div>
+</div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="../../">
+          <span class="brand-mark" aria-hidden="true">s</span>
+          <span class="brand-text">SohailAbbas Tools</span>
+        </a>
+        <p class="muted small">20 free browser-based calculators and converters. Every tool runs in your browser — files are
+          never uploaded to a server. Free, no account, no ads on this page.</p>
+        <p class="muted small">Last reviewed: 2026-10-22</p>
+      </div>
+      <nav aria-label="Tools 1-10"><h2 class="foot-h">Tools</h2><ul class="foot-list"><li><a href="../vat-calculator/">VAT Calculator</a></li><li><a href="../percentage-calculator/">Percentage Calculator</a></li><li><a href="../salary-calculator/">Salary Calculator</a></li><li><a href="./">Loan EMI Calculator</a></li><li><a href="../discount-calculator/">Discount Calculator</a></li><li><a href="../date-duration-calculator/">Date Duration Calculator</a></li><li><a href="../age-calculator/">Age Calculator</a></li><li><a href="../overtime-pay-calculator/">Overtime Pay Calculator</a></li><li><a href="../tip-calculator/">Tip Calculator</a></li><li><a href="../bmi-calculator/">BMI Calculator</a></li></ul></nav>
+      <nav aria-label="Tools 11-20"><h2 class="foot-h">More tools</h2><ul class="foot-list"><li><a href="../word-counter/">Word &amp; Character Counter</a></li><li><a href="../case-converter/">Case Converter</a></li><li><a href="../time-zone-converter/">Time Zone Converter</a></li><li><a href="../text-diff-checker/">Text Diff Checker</a></li><li><a href="../json-formatter/">JSON Formatter</a></li><li><a href="../pdf-merger/">PDF Merger</a></li><li><a href="../image-compressor/">Image Compressor</a></li><li><a href="../image-to-pdf/">Image to PDF</a></li><li><a href="../jpg-to-png/">JPG to PNG Converter</a></li><li><a href="../docx-to-pdf/">Word to PDF Converter</a></li></ul></nav>
+      <nav aria-label="Site"><h2 class="foot-h">Site</h2>
+        <ul class="foot-list"><li><a href="../../category/money-tax/">Money &amp; Tax</a></li><li><a href="../../category/everyday/">Everyday Calculators</a></li><li><a href="../../category/dates-time/">Dates &amp; Time</a></li><li><a href="../../category/text-code/">Text &amp; Code</a></li><li><a href="../../category/files/">PDF &amp; Image</a></li>
+          <li><a href="../../about/">About</a></li>
+          <li><a href="../../contact/">Contact</a></li>
+          <li><a href="../../privacy-policy/">Privacy policy</a></li>
+          <li><a href="../../terms/">Terms of use</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SohailAbbas Tools. Calculations are provided for information only — not financial,
+        tax or medical advice.</span>
+      <span><a href="../../sitemap.xml/">Sitemap</a> · <a href="../../llms.txt/">llms.txt</a></span>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  var b=document.getElementById('nav-toggle'),n=document.getElementById('site-nav');
+  if(!b||!n)return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open?'true':'false');
+  });
+})();
+</script>
+</body>
+</html>

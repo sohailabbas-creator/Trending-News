@@ -1,0 +1,44 @@
+# SohailAbbas Tools
+
+> 20 free browser-based calculators and converters. No uploads, no accounts, no ads.
+
+All tools run client-side. Calculations use published formulas shown on each page.
+For tax, finance and health questions the user's own authority is the source of truth.
+
+## Tools
+
+- [VAT Calculator](https://sohailabbas.site/tools/vat-calculator/) — Add VAT to a net price or extract it from a gross price, using UK and EU rates.
+- [Percentage Calculator](https://sohailabbas.site/tools/percentage-calculator/) — Work out a percentage of a number, what percent one number is of another, and percentage change.
+- [Salary Calculator](https://sohailabbas.site/tools/salary-calculator/) — Convert between hourly, weekly, monthly and annual pay, or work out your hourly rate from a salary.
+- [Loan EMI Calculator](https://sohailabbas.site/tools/loan-emi-calculator/) — Calculate the monthly payment on a loan, the total interest, and the full repayment schedule.
+- [Discount Calculator](https://sohailabbas.site/tools/discount-calculator/) — Find the sale price, the money saved and the effective percentage off any item.
+- [Date Duration Calculator](https://sohailabbas.site/tools/date-duration-calculator/) — Count the days, weeks and months between two dates, with or without the end date.
+- [Age Calculator](https://sohailabbas.site/tools/age-calculator/) — Find your exact age in years, months and days, plus when your next birthday falls.
+- [Overtime Pay Calculator](https://sohailabbas.site/tools/overtime-pay-calculator/) — Work out overtime pay at time and a half, double time or any custom multiplier.
+- [Tip Calculator](https://sohailabbas.site/tools/tip-calculator/) — Work out the tip, the total and each person's share of the bill.
+- [BMI Calculator](https://sohailabbas.site/tools/bmi-calculator/) — Check body mass index in metric or imperial units, with the healthy weight range for your height.
+- [Word & Character Counter](https://sohailabbas.site/tools/word-counter/) — Count words, characters, sentences and reading time as you type.
+- [Case Converter](https://sohailabbas.site/tools/case-converter/) — Switch text between UPPER, lower, Title, Sentence, camel, snake and kebab case.
+- [Time Zone Converter](https://sohailabbas.site/tools/time-zone-converter/) — Convert a time between cities and see the working-hours overlap for a meeting.
+- [Text Diff Checker](https://sohailabbas.site/tools/text-diff-checker/) — Compare two texts and highlight every added, removed and changed line.
+- [JSON Formatter](https://sohailabbas.site/tools/json-formatter/) — Beautify, minify and validate JSON with the exact position of any error.
+- [PDF Merger](https://sohailabbas.site/tools/pdf-merger/) — Combine several PDFs into one file, without uploading anything.
+- [Image Compressor](https://sohailabbas.site/tools/image-compressor/) — Reduce JPG, PNG and WebP file sizes with a quality slider, without uploading.
+- [Image to PDF](https://sohailabbas.site/tools/image-to-pdf/) — Turn JPG and PNG images into a single multi-page PDF, in your browser.
+- [JPG to PNG Converter](https://sohailabbas.site/tools/jpg-to-png/) — Convert JPEG images to lossless PNG, in bulk, without uploading.
+- [Word to PDF Converter](https://sohailabbas.site/tools/docx-to-pdf/) — Turn a .docx document into a clean, paginated PDF without uploading it.
+
+## Categories
+
+- Money & Tax: VAT Calculator, Salary Calculator, Loan EMI Calculator, Discount Calculator, Overtime Pay Calculator, Tip Calculator
+- Everyday Calculators: Percentage Calculator, BMI Calculator
+- Dates & Time: Date Duration Calculator, Age Calculator, Time Zone Converter
+- Text & Code: Word & Character Counter, Case Converter, Text Diff Checker, JSON Formatter
+- PDF & Image: PDF Merger, Image Compressor, Image to PDF, JPG to PNG Converter, Word to PDF Converter
+
+## Pages
+
+- [About](https://sohailabbas.site/about/)
+- [Contact](https://sohailabbas.site/contact/)
+- [Privacy policy](https://sohailabbas.site/privacy-policy/)
+- [Terms](https://sohailabbas.site/terms/)

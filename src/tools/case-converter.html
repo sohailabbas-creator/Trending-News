@@ -1,0 +1,69 @@
+<div class="panel">
+  <label for="cc-text">Your text</label>
+  <textarea id="cc-text" rows="6">the QUICK brown Fox jumps over the lazy dog. this IS a test of case conversion.</textarea>
+  <div class="chips" id="cc-buttons">
+    <button class="chip" data-m="upper">UPPERCASE</button>
+    <button class="chip" data-m="lower">lowercase</button>
+    <button class="chip" data-m="title">Title Case</button>
+    <button class="chip" data-m="sentence">Sentence case</button>
+    <button class="chip" data-m="camel">camelCase</button>
+    <button class="chip" data-m="pascal">PascalCase</button>
+    <button class="chip" data-m="snake">snake_case</button>
+    <button class="chip" data-m="kebab">kebab-case</button>
+    <button class="chip" data-m="constant">CONSTANT_CASE</button>
+  </div>
+  <div class="btns">
+    <button class="btn btn-primary" id="cc-copy">Copy result</button>
+    <button class="btn" id="cc-undo">Undo</button>
+    <button class="btn" id="cc-clear">Clear</button>
+  </div>
+  <p class="count-line"><span id="cc-chars">0</span> characters · <span id="cc-words">0</span> words</p>
+  <p class="status" id="cc-status" role="status"></p>
+</div>
+
+<script>
+(function(){
+  var text=document.getElementById('cc-text'),status=document.getElementById('cc-status'),history=[];
+  var SMALL=['a','an','and','as','at','but','by','for','in','nor','of','on','or','per','so','the','to','up','via','vs','yet'];
+  function words(s){return s.trim().toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean);}
+  function title(s){
+    return s.replace(/[_-]+/g,' ').toLowerCase().replace(/\b[a-z]/g,function(c){return c.toUpperCase();})
+      .replace(/\b([A-Za-z]+)\b/g,function(w,word,off){
+        return off!==0&&SMALL.indexOf(word.toLowerCase())>-1?word.toLowerCase():w;});
+  }
+  var M={
+    upper:function(s){return s.toUpperCase();},
+    lower:function(s){return s.toLowerCase();},
+    title:title,
+    sentence:function(s){return s.replace(/[_-]+/g,' ').toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g,function(c){return c.toUpperCase();});},
+    camel:function(s){var w=words(s);return w.map(function(x,i){return i?x.charAt(0).toUpperCase()+x.slice(1):x;}).join('');},
+    pascal:function(s){return words(s).map(function(x){return x.charAt(0).toUpperCase()+x.slice(1);}).join('');},
+    snake:function(s){return words(s).join('_');},
+    kebab:function(s){return words(s).join('-');},
+    constant:function(s){return words(s).join('_').toUpperCase();}
+  };
+  function stats(){
+    document.getElementById('cc-chars').textContent=text.value.length.toLocaleString();
+    document.getElementById('cc-words').textContent=text.value.trim()?text.value.trim().split(/\s+/).length:0;
+  }
+  document.getElementById('cc-buttons').addEventListener('click',function(e){
+    var b=e.target.closest('.chip');if(!b)return;
+    history.push(text.value);if(history.length>20)history.shift();
+    text.value=M[b.dataset.m](text.value);stats();
+    [].forEach.call(this.querySelectorAll('.chip'),function(c){c.classList.toggle('is-on',c===b);});
+    status.textContent='Converted to '+b.textContent+'.';status.className='status ok show';
+    setTimeout(function(){status.className='status';},1500);
+  });
+  document.getElementById('cc-undo').addEventListener('click',function(){
+    if(history.length){text.value=history.pop();stats();}});
+  document.getElementById('cc-clear').addEventListener('click',function(){
+    history.push(text.value);text.value='';stats();text.focus();});
+  document.getElementById('cc-copy').addEventListener('click',function(){
+    navigator.clipboard.writeText(text.value).then(function(){
+      status.textContent='Copied.';status.className='status ok show';
+      setTimeout(function(){status.className='status';},1500);});
+  });
+  text.addEventListener('input',stats);
+  stats();
+})();
+</script>

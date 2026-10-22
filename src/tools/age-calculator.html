@@ -1,0 +1,65 @@
+<div class="panel">
+  <div class="row">
+    <div class="field"><label for="age-dob">Date of birth</label><input type="date" id="age-dob" value="1995-06-15"></div>
+    <div class="field"><label for="age-on">Age on this date</label><input type="date" id="age-on"></div>
+  </div>
+  <div class="btns">
+    <button class="btn btn-primary" id="age-calc">Calculate age</button>
+    <button class="btn" id="age-today">Use today</button>
+  </div>
+  <div class="out out-lg" id="age-main" aria-live="polite"></div>
+  <p class="status" id="age-status" role="status"></p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat"><b id="age-months">—</b><span>Total months</span></div>
+  <div class="stat"><b id="age-weeks">—</b><span>Total weeks</span></div>
+  <div class="stat"><b id="age-days">—</b><span>Total days</span></div>
+  <div class="stat"><b id="age-hours">—</b><span>Total hours</span></div>
+</div>
+
+<div class="panel panel-soft">
+  <h2 class="panel-h">Next birthday</h2>
+  <p id="age-bday" class="mb0"></p>
+</div>
+
+<script>
+(function(){
+  var dobEl=document.getElementById('age-dob'),onEl=document.getElementById('age-on'),status=document.getElementById('age-status');
+  function iso(d){return d.toISOString().slice(0,10);}
+  onEl.value=iso(new Date());
+  var fmt=new Intl.DateTimeFormat(undefined,{day:'numeric',month:'long',year:'numeric'});
+  var fmtLong=new Intl.DateTimeFormat(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  function calc(){
+    if(!dobEl.value||!onEl.value){return;}
+    var dob=new Date(dobEl.value+'T00:00:00'),on=new Date(onEl.value+'T00:00:00');
+    if(on<dob){
+      document.getElementById('age-main').textContent='The measurement date is before the date of birth, so there is no age to calculate.';
+      return;
+    }
+    var y=on.getFullYear()-dob.getFullYear(),m=on.getMonth()-dob.getMonth(),d=on.getDate()-dob.getDate();
+    if(d<0){m--;d+=new Date(on.getFullYear(),on.getMonth(),0).getDate();}
+    if(m<0){y--;m+=12;}
+    var days=Math.round((on-dob)/86400000);
+
+    document.getElementById('age-main').innerHTML='<b>'+y+' years, '+m+' months, '+d+' days</b>'+
+      '<span class="muted"> — born '+fmt.format(dob)+', measured on '+fmt.format(on)+'</span>';
+    document.getElementById('age-months').textContent=(y*12+m).toLocaleString();
+    document.getElementById('age-weeks').textContent=Math.floor(days/7).toLocaleString();
+    document.getElementById('age-days').textContent=days.toLocaleString();
+    document.getElementById('age-hours').textContent=(days*24).toLocaleString();
+
+    var next=new Date(on.getFullYear(),dob.getMonth(),dob.getDate());
+    if(next<on){next=new Date(on.getFullYear()+1,dob.getMonth(),dob.getDate());}
+    var until=Math.round((next-on)/86400000), turning=next.getFullYear()-dob.getFullYear();
+    document.getElementById('age-bday').innerHTML=(until===0
+      ? 'Happy birthday — you turn <b>'+turning+'</b> today.'
+      : '<b>'+until+'</b> day'+(until===1?'':'s')+' until your next birthday on '+fmtLong.format(next)+', when you turn <b>'+turning+'</b>.');
+    status.className='status';
+  }
+  document.getElementById('age-calc').addEventListener('click',calc);
+  document.getElementById('age-today').addEventListener('click',function(){onEl.value=iso(new Date());calc();});
+  dobEl.addEventListener('change',calc);onEl.addEventListener('change',calc);
+  calc();
+})();
+</script>

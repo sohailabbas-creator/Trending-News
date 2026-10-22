@@ -1,0 +1,112 @@
+<div class="panel">
+  <div class="row">
+    <div class="field">
+      <label for="tz-source">Time in</label>
+      <select id="tz-source"></select>
+    </div>
+    <div class="field">
+      <label for="tz-when">Date and time</label>
+      <input type="datetime-local" id="tz-when">
+    </div>
+  </div>
+  <div class="btns">
+    <button class="btn btn-primary" id="tz-now">Use current time</button>
+    <button class="btn" id="tz-add">Add a city</button>
+  </div>
+  <p class="hint">Working hours (09:00–17:00) are highlighted in the list below.</p>
+  <p class="status" id="tz-status" role="status"></p>
+</div>
+
+<div class="panel">
+  <h2 class="panel-h">Converted times</h2>
+  <div class="table-wrap table-scroll"><table class="data">
+    <thead><tr><th scope="col">City</th><th scope="col">Local time</th><th scope="col">Day</th><th scope="col">UTC offset</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead>
+    <tbody id="tz-body"></tbody>
+  </table></div>
+</div>
+
+<script>
+(function(){
+  var ZONES=[
+    ['Europe/London','London'],['Europe/Dublin','Dublin'],['Europe/Paris','Paris'],['Europe/Berlin','Berlin · Munich'],
+    ['Europe/Madrid','Madrid'],['Europe/Rome','Rome'],['Europe/Amsterdam','Amsterdam'],['Europe/Brussels','Brussels'],
+    ['Europe/Warsaw','Warsaw'],['Europe/Lisbon','Lisbon'],['Europe/Stockholm','Stockholm'],['Europe/Vienna','Vienna'],
+    ['Europe/Zurich','Zurich'],['Europe/Istanbul','Istanbul'],['America/New_York','New York'],['America/Chicago','Chicago'],
+    ['America/Denver','Denver'],['America/Los_Angeles','Los Angeles'],['America/Toronto','Toronto'],['America/Sao_Paulo','São Paulo'],
+    ['Asia/Dubai','Dubai'],['Asia/Karachi','Karachi'],['Asia/Kolkata','Mumbai · Delhi'],['Asia/Singapore','Singapore'],
+    ['Asia/Shanghai','Shanghai'],['Asia/Tokyo','Tokyo'],['Asia/Seoul','Seoul'],['Australia/Sydney','Sydney'],['Pacific/Auckland','Auckland'],['Africa/Johannesburg','Johannesburg']
+  ];
+  var selected=['Europe/London','Europe/Berlin','America/New_York','Asia/Dubai'];
+  var src=document.getElementById('tz-source'),when=document.getElementById('tz-when'),status=document.getElementById('tz-status');
+
+  src.innerHTML=ZONES.map(function(z){return '<option value="'+z[0]+'">'+z[1]+'</option>';}).join('');
+  src.value='Europe/London';
+
+  function pad(n){return String(n).padStart(2,'0');}
+  function localInputValue(){
+    var d=new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+  when.value=localInputValue();
+
+  function offsetLabel(tz,date){
+    var s=new Intl.DateTimeFormat('en-GB',{timeZone:tz,timeZoneName:'shortOffset'}).formatToParts(date)
+      .find(function(p){return p.type==='timeZoneName';});
+    return s?s.value:'UTC';
+  }
+  function timeIn(tz,date){
+    return new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).format(date);
+  }
+  function dayIn(tz,date){
+    return new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',day:'numeric',month:'short'}).format(date);
+  }
+  function absoluteDate(){
+    // interpret the datetime-local value in the source zone
+    var raw=when.value;
+    if(!raw){when.value=localInputValue();raw=when.value;}
+    var base=new Date(raw+':00');
+    var guess=base.getTime();
+    for(var i=0;i<3;i++){
+      var shown=new Date(new Intl.DateTimeFormat('sv-SE',{timeZone:src.value,year:'numeric',month:'2-digit',day:'2-digit',
+        hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(guess)).replace(' ','T')+':00');
+      var diff=base.getTime()-shown.getTime();
+      if(Math.abs(diff)<30000)break;
+      guess+=diff;
+    }
+    return new Date(guess);
+  }
+  function render(){
+    var date=absoluteDate();
+    document.getElementById('tz-body').innerHTML=selected.map(function(tz){
+      var name=(ZONES.find(function(z){return z[0]===tz;})||[tz,tz])[1];
+      var t=timeIn(tz,date);
+      var hour=parseInt(t.slice(0,2),10);
+      var work=hour>=9&&hour<17;
+      return '<tr'+(tz===src.value?' class="is-source"':'')+'>'+
+        '<td><b>'+name+'</b>'+(tz===src.value?' <span class="tag">source</span>':'')+'</td>'+
+        '<td class="mono'+(work?' is-work':'')+'">'+t+'</td>'+
+        '<td class="small">'+dayIn(tz,date)+'</td>'+
+        '<td class="mono small">'+offsetLabel(tz,date)+'</td>'+
+        '<td><button class="link-btn" data-remove="'+tz+'" aria-label="Remove '+name+'">×</button></td></tr>';
+    }).join('');
+  }
+  document.getElementById('tz-body').addEventListener('click',function(e){
+    var b=e.target.closest('[data-remove]');if(!b)return;
+    selected=selected.filter(function(z){return z!==b.dataset.remove;});
+    render();
+  });
+  document.getElementById('tz-add').addEventListener('click',function(){
+    var add=prompt('City zone to add, e.g. Asia/Tokyo\n\nOptions: '+ZONES.map(function(z){return z[0];}).join(', '));
+    if(!add)return;
+    if(!ZONES.some(function(z){return z[0]===add;})){status.textContent='Unknown zone. Use one of the listed IANA names.';status.className='status bad show';return;}
+    if(selected.indexOf(add)===-1&&selected.length<8)selected.push(add);
+    render();
+  });
+  document.getElementById('tz-now').addEventListener('click',function(){
+    when.value=localInputValue();render();});
+  src.addEventListener('change',render);
+  when.addEventListener('change',render);
+  when.addEventListener('input',render);
+  render();
+})();
+</script>

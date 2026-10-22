@@ -1,0 +1,98 @@
+<div class="panel">
+  <label class="drop" id="pm-drop" for="pm-files">
+    <strong>Choose PDF files</strong> or drag them here<br>
+    <span class="muted small">They are read in your browser — nothing is uploaded.</span>
+  </label>
+  <input type="file" id="pm-files" accept="application/pdf" multiple hidden>
+
+  <ul class="filelist" id="pm-list"></ul>
+
+  <div class="btns">
+    <button class="btn btn-primary" id="pm-merge" disabled>Merge PDFs</button>
+    <button class="btn" id="pm-clear" disabled>Clear list</button>
+  </div>
+  <p class="status" id="pm-status" role="status">No files selected.</p>
+  <div id="pm-download"></div>
+</div>
+
+<script src="{{P}}assets/vendor/pdf-lib.min.js"></script>
+<script>
+(function(){
+  var files=[],status=document.getElementById('pm-status'),list=document.getElementById('pm-list'),
+      mergeBtn=document.getElementById('pm-merge'),clearBtn=document.getElementById('pm-clear'),
+      dl=document.getElementById('pm-download'),input=document.getElementById('pm-files');
+  function size(b){return b>1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(0)+' KB';}
+  function render(){
+    list.innerHTML=files.map(function(f,i){
+      return '<li><span class="fl-name">'+(i+1)+'. '+f.file.name+'</span>'+
+        '<span class="muted small">'+size(f.file.size)+(f.pages?' · '+f.pages+' pages':'')+'</span>'+
+        '<span class="fl-actions">'+
+        '<button class="link-btn" data-up="'+i+'" aria-label="Move up">↑</button>'+
+        '<button class="link-btn" data-down="'+i+'" aria-label="Move down">↓</button>'+
+        '<button class="link-btn" data-del="'+i+'" aria-label="Remove">×</button></span></li>';
+    }).join('');
+    mergeBtn.disabled=files.length<2;
+    clearBtn.disabled=files.length===0;
+    if(files.length<2)status.textContent=files.length?'Add at least one more PDF to merge.':'No files selected.';
+    var total=files.reduce(function(a,f){return a+f.file.size;},0);
+    if(files.length>1)status.textContent=files.length+' files · '+size(total)+' total · '+files.reduce(function(a,f){return a+(f.pages||0);},0)+' pages';
+    status.className='status';
+  }
+  async function addFiles(fileList){
+    var arr=[].slice.call(fileList);   // copy first: clearing the input drops the live FileList
+    for(var i=0;i<arr.length;i++){
+      var f=arr[i];
+      if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name)){status.textContent='Skipped '+f.name+' — not a PDF.';status.className='status bad show';continue;}
+      var pages=null;
+      try{
+        var bytes=await f.arrayBuffer();
+        var doc=await PDFLib.PDFDocument.load(bytes,{ignoreEncryption:true});
+        pages=doc.getPageCount();
+      }catch(e){status.textContent='Could not read '+f.name+' (it may be password protected).';status.className='status bad show';}
+      files.push({file:f,pages:pages});
+    }
+    render();
+  }
+  input.addEventListener('change',function(e){
+    var picked=[].slice.call(e.target.files);input.value='';addFiles(picked);});
+  ['dragenter','dragover'].forEach(function(ev){
+    document.getElementById('pm-drop').addEventListener(ev,function(e){e.preventDefault();this.classList.add('over');});});
+  ['dragleave','drop'].forEach(function(ev){
+    document.getElementById('pm-drop').addEventListener(ev,function(e){e.preventDefault();this.classList.remove('over');});});
+  document.getElementById('pm-drop').addEventListener('drop',function(e){
+    if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
+  list.addEventListener('click',function(e){
+    var t=e.target;
+    if(t.dataset.up!==undefined){var i=+t.dataset.up;if(i>0){files.splice(i-1,0,files.splice(i,1)[0]);render();}}
+    if(t.dataset.down!==undefined){var j=+t.dataset.down;if(j<files.length-1){files.splice(j+1,0,files.splice(j,1)[0]);render();}}
+    if(t.dataset.del!==undefined){files.splice(+t.dataset.del,1);render();}
+  });
+  clearBtn.addEventListener('click',function(){files=[];dl.innerHTML='';render();});
+  mergeBtn.addEventListener('click',async function(){
+    if(files.length<2)return;
+    mergeBtn.disabled=true;
+    status.textContent='Merging in your browser…';status.className='status show';
+    try{
+      var outDoc=await PDFLib.PDFDocument.create();
+      for(var i=0;i<files.length;i++){
+        var bytes=await files[i].file.arrayBuffer();
+        var src=await PDFLib.PDFDocument.load(bytes,{ignoreEncryption:true});
+        var pages=await outDoc.copyPages(src,src.getPageIndices());
+        pages.forEach(function(p){outDoc.addPage(p);});
+      }
+      var merged=await outDoc.save();
+      var blob=new Blob([merged],{type:'application/pdf'});
+      var url=URL.createObjectURL(blob);
+      dl.innerHTML='<a class="btn btn-primary" href="'+url+'" download="merged.pdf">Download merged PDF ('+
+        outDoc.getPageCount()+' pages, '+size(blob.size)+')</a>';
+      status.textContent='Done — '+outDoc.getPageCount()+' pages, '+size(blob.size)+'.';
+      status.className='status ok show';
+    }catch(err){
+      status.textContent='Merge failed: '+err.message;
+      status.className='status bad show';
+    }
+    mergeBtn.disabled=false;
+  });
+  render();
+})();
+</script>

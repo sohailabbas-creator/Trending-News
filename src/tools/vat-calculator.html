@@ -1,0 +1,108 @@
+<div class="panel">
+  <div class="row">
+    <div class="field">
+      <label for="vat-country">Country</label>
+      <select id="vat-country">
+        <option value="20" selected>United Kingdom — VAT 20%</option>
+        <option value="19">Germany — MwSt 19%</option>
+        <option value="20">France — TVA 20%</option>
+        <option value="22">Italy — IVA 22%</option>
+        <option value="21">Spain — IVA 21%</option>
+        <option value="21">Netherlands — BTW 21%</option>
+        <option value="21">Belgium — TVA/BTW 21%</option>
+        <option value="20">Austria — USt 20%</option>
+        <option value="23">Poland — VAT 23%</option>
+        <option value="23">Ireland — VAT 23%</option>
+        <option value="25">Sweden — Moms 25%</option>
+        <option value="23">Portugal — IVA 23%</option>
+        <option value="custom">Other / custom rate</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="vat-rate">VAT rate (%)</label>
+      <input type="number" id="vat-rate" value="20" min="0" max="100" step="0.1" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="field">
+    <span class="label">Direction</span>
+    <div class="seg" role="radiogroup" aria-label="VAT direction">
+      <button type="button" class="seg-btn is-on" data-mode="add" role="radio" aria-checked="true">Add VAT (net → gross)</button>
+      <button type="button" class="seg-btn" data-mode="remove" role="radio" aria-checked="false">Remove VAT (gross → net)</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="vat-amount" id="vat-amount-label">Amount excluding VAT</label>
+    <input type="number" id="vat-amount" value="500" min="0" step="0.01" inputmode="decimal">
+    <p class="hint" id="vat-hint">The VAT amount is added to your figure.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><b id="vat-net">—</b><span>Net (excl. VAT)</span></div>
+    <div class="stat"><b id="vat-tax">—</b><span>VAT amount</span></div>
+    <div class="stat"><b id="vat-gross">—</b><span>Gross (incl. VAT)</span></div>
+  </div>
+
+  <div class="out" id="vat-breakdown" aria-live="polite"></div>
+
+  <div class="btns">
+    <button class="btn btn-primary" id="vat-copy">Copy breakdown</button>
+    <button class="btn" id="vat-reset">Reset</button>
+  </div>
+  <p class="status" id="vat-status" role="status"></p>
+</div>
+
+<script>
+(function(){
+  var rate=document.getElementById('vat-rate'),amount=document.getElementById('vat-amount'),
+      country=document.getElementById('vat-country'),mode='add',status=document.getElementById('vat-status');
+  var money=function(n){return n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});};
+  function calc(){
+    var r=parseFloat(rate.value)||0, a=parseFloat(amount.value);
+    if(isNaN(a)||a<0){a=0;}
+    var net,tax,gross;
+    if(mode==='add'){net=a;tax=net*r/100;gross=net+tax;}
+    else{gross=a;net=gross/(1+r/100);tax=gross-net;}
+    document.getElementById('vat-net').textContent=money(net);
+    document.getElementById('vat-tax').textContent=money(tax);
+    document.getElementById('vat-gross').textContent=money(gross);
+    document.getElementById('vat-breakdown').textContent=
+      'Net '+money(net)+'  +  VAT '+r+'% '+money(tax)+'  =  Total '+money(gross)+
+      (mode==='add'?'':'   (back-calculated: '+money(gross)+' ÷ '+(1+r/100).toFixed(4)+')');
+    document.getElementById('vat-amount-label').textContent=
+      mode==='add'?'Amount excluding VAT':'Amount including VAT';
+    document.getElementById('vat-hint').textContent=
+      mode==='add'?'The VAT amount is added to your figure.':'VAT is extracted from inside your figure — this divides by 1 + the rate, it does not subtract the rate.';
+  }
+  country.addEventListener('change',function(){
+    if(country.value!=='custom'){rate.value=country.value;}
+    calc();
+  });
+  rate.addEventListener('input',calc);
+  amount.addEventListener('input',calc);
+  document.querySelectorAll('.seg-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      mode=b.dataset.mode;
+      document.querySelectorAll('.seg-btn').forEach(function(x){
+        x.classList.toggle('is-on',x===b);x.setAttribute('aria-checked',String(x===b));});
+      calc();
+    });
+  });
+  document.getElementById('vat-copy').addEventListener('click',function(){
+    var t='Net '+document.getElementById('vat-net').textContent+' | VAT '+document.getElementById('vat-tax').textContent+
+          ' | Gross '+document.getElementById('vat-gross').textContent;
+    navigator.clipboard.writeText(t).then(function(){
+      status.textContent='Breakdown copied.';status.className='status ok show';
+      setTimeout(function(){status.className='status';},1600);
+    });
+  });
+  document.getElementById('vat-reset').addEventListener('click',function(){
+    amount.value=500;rate.value=20;country.value='20';mode='add';
+    document.querySelectorAll('.seg-btn').forEach(function(x){
+      var on=x.dataset.mode==='add';x.classList.toggle('is-on',on);x.setAttribute('aria-checked',String(on));});
+    calc();
+  });
+  calc();
+})();
+</script>

@@ -1,0 +1,107 @@
+<div class="panel">
+  <div class="seg" role="tablist" aria-label="Percentage mode">
+    <button class="seg-btn is-on" data-m="of" role="tab" aria-selected="true">X% of Y</button>
+    <button class="seg-btn" data-m="is" role="tab" aria-selected="false">X is what % of Y</button>
+    <button class="seg-btn" data-m="change" role="tab" aria-selected="false">Change A → B</button>
+    <button class="seg-btn" data-m="reverse" role="tab" aria-selected="false">Reverse %</button>
+  </div>
+
+  <div id="p-of" class="pane">
+    <div class="row">
+      <div class="field"><label for="of-a">Percentage (%)</label><input type="number" id="of-a" value="15" step="any" inputmode="decimal"></div>
+      <div class="field"><label for="of-b">Of value</label><input type="number" id="of-b" value="200" step="any" inputmode="decimal"></div>
+    </div>
+  </div>
+  <div id="p-is" class="pane" hidden>
+    <div class="row">
+      <div class="field"><label for="is-a">Number X</label><input type="number" id="is-a" value="45" step="any" inputmode="decimal"></div>
+      <div class="field"><label for="is-b">Out of Y</label><input type="number" id="is-b" value="60" step="any" inputmode="decimal"></div>
+    </div>
+  </div>
+  <div id="p-change" class="pane" hidden>
+    <div class="row">
+      <div class="field"><label for="ch-a">Original value (A)</label><input type="number" id="ch-a" value="80" step="any" inputmode="decimal"></div>
+      <div class="field"><label for="ch-b">New value (B)</label><input type="number" id="ch-b" value="100" step="any" inputmode="decimal"></div>
+    </div>
+  </div>
+  <div id="p-reverse" class="pane" hidden>
+    <div class="row">
+      <div class="field"><label for="rv-a">Final amount (after % was applied)</label><input type="number" id="rv-a" value="600" step="any" inputmode="decimal"></div>
+      <div class="field"><label for="rv-b">Percentage that was applied (%)</label><input type="number" id="rv-b" value="20" step="any" inputmode="decimal"></div>
+    </div>
+    <p class="hint">Use this to remove VAT, a service charge or a markup from a figure that already includes it.</p>
+  </div>
+
+  <div class="out out-lg" id="p-out" aria-live="polite"></div>
+  <p class="hint" id="p-formula"></p>
+  <div class="btns"><button class="btn btn-primary" id="p-copy">Copy answer</button></div>
+  <p class="status" id="p-status" role="status"></p>
+</div>
+
+<div class="panel panel-soft">
+  <h2 class="panel-h">Quick answers</h2>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th scope="col">Question</th><th scope="col">Answer</th></tr></thead>
+    <tbody id="p-quick"></tbody>
+  </table></div>
+</div>
+
+<script>
+(function(){
+  var mode='of',status=document.getElementById('p-status');
+  function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?null:v;}
+  function fmt(x){
+    if(x===null||!isFinite(x))return '—';
+    var a=Math.abs(x);
+    if(a!==0&&(a<0.001||a>=1e12))return x.toExponential(4);
+    return parseFloat(x.toPrecision(10)).toLocaleString(undefined,{maximumFractionDigits:6});
+  }
+  function run(){
+    var out='—',formula='',answer='';
+    if(mode==='of'){
+      var p=n('of-a'),v=n('of-b');
+      if(p!==null&&v!==null){var r=v*p/100;answer=fmt(r);out='<b>'+answer+'</b>';formula='('+p+' ÷ 100) × '+v+' = '+fmt(r);}
+    } else if(mode==='is'){
+      var a=n('is-a'),b=n('is-b');
+      if(a!==null&&b!==null&&b!==0){var pc=a/b*100;answer=fmt(pc)+'%';out='<b>'+answer+'</b>';formula='('+a+' ÷ '+b+') × 100 = '+fmt(pc)+'%';}
+    } else if(mode==='change'){
+      var A=n('ch-a'),B=n('ch-b');
+      if(A!==null&&B!==null&&A!==0){
+        var ch=(B-A)/Math.abs(A)*100,word=ch>0?'increase':(ch<0?'decrease':'no change');
+        answer=(ch>0?'+':'')+fmt(ch)+'%';out='<b>'+answer+'</b> <span class="muted">'+word+'</span>';
+        formula='(('+B+' − '+A+') ÷ '+Math.abs(A)+') × 100 = '+fmt(ch)+'% · difference '+fmt(B-A);
+      }
+    } else {
+      var F=n('rv-a'),P=n('rv-b');
+      if(F!==null&&P!==null){var orig=F/(1+P/100);answer=fmt(orig);out='<b>'+answer+'</b>';
+        formula=F+' ÷ (1 + '+P+' ÷ 100) = '+fmt(orig)+' · the percentage portion is '+fmt(F-orig);}
+    }
+    document.getElementById('p-out').innerHTML=out;
+    document.getElementById('p-formula').textContent=formula?('Formula: '+formula):'';
+    return answer;
+  }
+  document.querySelectorAll('.seg-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      mode=b.dataset.m;
+      document.querySelectorAll('.seg-btn').forEach(function(x){
+        x.classList.toggle('is-on',x===b);x.setAttribute('aria-selected',String(x===b));});
+      ['of','is','change','reverse'].forEach(function(k){
+        document.getElementById('p-'+k).hidden=(k!==mode);});
+      run();
+    });
+  });
+  document.querySelectorAll('.pane input').forEach(function(i){i.addEventListener('input',run);});
+  document.getElementById('p-copy').addEventListener('click',function(){
+    var t=document.getElementById('p-formula').textContent||document.getElementById('p-out').textContent;
+    navigator.clipboard.writeText(t).then(function(){
+      status.textContent='Copied.';status.className='status ok show';
+      setTimeout(function(){status.className='status';},1500);});
+  });
+  var quick=[['What is 10% of 250?','25'],['What is 20% of 1,500?','300'],['15 is what % of 60?','25%'],
+             ['80 is what % of 200?','40%'],['80 → 100','+25%'],['100 → 80','−20%'],
+             ['600 including 20% VAT','500 net, 100 VAT'],['138 including 15% service','120 original, 18 charge']];
+  document.getElementById('p-quick').innerHTML=quick.map(function(r){
+    return '<tr><td>'+r[0]+'</td><td class="mono">'+r[1]+'</td></tr>';}).join('');
+  run();
+})();
+</script>
