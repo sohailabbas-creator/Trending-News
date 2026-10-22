@@ -1,0 +1,66 @@
+# sohailabbas.site — Apache configuration for Namecheap shared hosting
+# Keeps every OLD public URL working with a single 301 to its flat equivalent.
+
+Options -Indexes
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- legacy clean URLs -> flat .html files (permanent, one hop) ---
+  RewriteRule ^tools/date-duration-calculator/?$ /date-duration-calculator.html [R=301,L]
+  RewriteRule ^tools/overtime-pay-calculator/?$ /overtime-pay-calculator.html [R=301,L]
+  RewriteRule ^tools/percentage-calculator/?$ /percentage-calculator.html [R=301,L]
+  RewriteRule ^tools/discount-calculator/?$ /discount-calculator.html [R=301,L]
+  RewriteRule ^tools/loan-emi-calculator/?$ /loan-emi-calculator.html [R=301,L]
+  RewriteRule ^tools/time-zone-converter/?$ /time-zone-converter.html [R=301,L]
+  RewriteRule ^tools/salary-calculator/?$ /salary-calculator.html [R=301,L]
+  RewriteRule ^tools/text-diff-checker/?$ /text-diff-checker.html [R=301,L]
+  RewriteRule ^tools/image-compressor/?$ /image-compressor.html [R=301,L]
+  RewriteRule ^tools/age-calculator/?$ /age-calculator.html [R=301,L]
+  RewriteRule ^tools/bmi-calculator/?$ /bmi-calculator.html [R=301,L]
+  RewriteRule ^tools/case-converter/?$ /case-converter.html [R=301,L]
+  RewriteRule ^tools/json-formatter/?$ /json-formatter.html [R=301,L]
+  RewriteRule ^tools/tip-calculator/?$ /tip-calculator.html [R=301,L]
+  RewriteRule ^tools/vat-calculator/?$ /vat-calculator.html [R=301,L]
+  RewriteRule ^category/dates-time/?$ /dates-time-calculators.html [R=301,L]
+  RewriteRule ^category/money-tax/?$ /money-tax-calculators.html [R=301,L]
+  RewriteRule ^category/text-code/?$ /text-code-calculators.html [R=301,L]
+  RewriteRule ^tools/image-to-pdf/?$ /image-to-pdf.html [R=301,L]
+  RewriteRule ^tools/word-counter/?$ /word-counter.html [R=301,L]
+  RewriteRule ^category/everyday/?$ /everyday-calculators.html [R=301,L]
+  RewriteRule ^tools/docx-to-pdf/?$ /docx-to-pdf.html [R=301,L]
+  RewriteRule ^tools/jpg-to-png/?$ /jpg-to-png.html [R=301,L]
+  RewriteRule ^tools/pdf-merger/?$ /pdf-merger.html [R=301,L]
+  RewriteRule ^category/files/?$ /files-calculators.html [R=301,L]
+  RewriteRule ^privacy-policy/?$ /privacy-policy.html [R=301,L]
+  RewriteRule ^all-tools/?$ /all-tools.html [R=301,L]
+  RewriteRule ^category/?$ /categories.html [R=301,L]
+  RewriteRule ^contact/?$ /contact.html [R=301,L]
+  RewriteRule ^about/?$ /about.html [R=301,L]
+  RewriteRule ^terms/?$ /terms.html [R=301,L]
+
+  # --- force https + non-www canonical host ---
+  # Uncomment after SSL is active on the domain.
+  # RewriteCond %{HTTPS} !=on
+  # RewriteRule ^(.*)$ https://sohailabbas.site/$1 [R=301,L]
+  # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  # RewriteRule ^(.*)$ https://sohailabbas.site/$1 [R=301,L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json text/plain application/xml image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+AddDefaultCharset UTF-8

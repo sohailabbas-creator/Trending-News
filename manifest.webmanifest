@@ -1,0 +1,10 @@
+{
+  "name": "SohailAbbas Tools \u2014 20 free browser tools",
+  "short_name": "SA Tools",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "description": "20 free browser-based calculators and converters",
+  "icons": []
+}
