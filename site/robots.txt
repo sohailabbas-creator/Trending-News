@@ -1,6 +1,0 @@
-# https://sohailabbas.site
-User-agent: *
-Allow: /
-Disallow: /404.html
-
-Sitemap: https://sohailabbas.site/sitemap.xml
