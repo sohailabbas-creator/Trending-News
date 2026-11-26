@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reorder PDF pages online by entering a new page sequence. Create a reordered copy in your browser; the original stays on your device.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ed3b36">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Sohail Tools">
+  <meta property="og:title" content="Reorder PDF Pages Online | Sohail Tools">
+  <meta property="og:description" content="Choose a new sequence for PDF pages and download a reordered copy, processed locally in your browser.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Reorder PDF Pages Online | Sohail Tools">
+  <meta name="twitter:description" content="Choose a new sequence for PDF pages and download a reordered copy, processed locally in your browser.">
+  <title>Reorder PDF Pages Online | Sohail Tools</title>
+  <link rel="stylesheet" href="tool-guide.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-nav">
+      <a class="brand" href="index.html" aria-label="Sohail Tools home">Sohail Tools</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html#tools">All guides</a>
+        <a href="index.html#guide">PDF guide</a>
+        <a href="index.html#about">About</a>
+      </nav>
+    </div>
+  </header>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a> &rsaquo; <a href="index.html#tools">PDF guides</a> &rsaquo; <span aria-current="page">Organize PDF</span>
+  </nav>
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <p class="eyebrow">PDF page organization guide</p>
+        <h1>Organize PDF</h1>
+        <p class="lead">Organizing PDF pages can make a document easier to follow. Common changes include reordering pages, correcting orientation, and removing duplicates or irrelevant sections.</p>
+      </div>
+    </section>
+    <div class="page-layout">
+      <article class="guide-content">
+        <div class="notice" role="note"><strong>Privacy:</strong> Your file is processed in this browser and is not uploaded to Sohail Tools. Keep your original copy.</div>
+        <section class="tool-app" data-tool="organize" aria-labelledby="tool-title">
+          <h2 id="tool-title">Reorder PDF pages</h2>
+          <p>Enter every page number in the order you want them in the new PDF.</p>
+          <form>
+            <label>Choose a PDF
+              <input type="file" accept="application/pdf,.pdf" required>
+            </label>
+            <label>New page order
+              <input type="text" name="pages" placeholder="For example: 3, 1, 2" required>
+            </label>
+            <p class="tool-hint">Include each page once. The page count appears as a suggested order after you choose a file.</p>
+            <button type="submit">Reorder pages</button>
+          </form>
+          <p class="tool-status" role="status" aria-live="polite"></p>
+          <a class="tool-download" href="#">Download reordered PDF</a>
+        </section>
+        <h2>About Organize PDF</h2>
+        <p>Plan page moves and removals before editing. Viewer numbering may differ from printed labels, and some landscape pages are intentional. Work on a copy when the PDF is an official record or shared source.</p>
+        <h2 id="steps">Steps for Organize PDF</h2>
+        <ol>
+            <li>Select a PDF and note every page number.</li>
+            <li>Enter the full new sequence, for example 3, 1, 2.</li>
+            <li>Choose Reorder pages and download the new copy.</li>
+            <li>Check the page sequence and confirm each page appears once.</li>
+        </ol>
+        <h2>Review the result</h2>
+        <p>Check for missing, repeated, blank, or unexpectedly rotated pages. Keep the original file until the revised copy has been approved.</p>
+        <section class="faq" id="faq" aria-labelledby="faq-title">
+          <h2 id="faq-title">Frequently asked questions</h2>
+          <details>
+            <summary>Can I reorder pages without changing their text?</summary>
+            <p>Page organization typically moves whole pages, but saving may alter file structure. Inspect the output and compare it with the original.</p>
+          </details>
+          <details>
+            <summary>Should I remove blank pages?</summary>
+            <p>Only if they are accidental and not needed for printing, signatures, or layout. Review the document&#39;s intended use first.</p>
+          </details>
+        </section>
+      </article>
+      <aside class="side-card">
+        <h2>Explore this guide</h2>
+        <p>Use this checklist as general information. Keep a backup of important documents and verify the saved result.</p>
+        <a href="#steps">View the steps</a>
+        <p><a href="index.html#tools">Browse all PDF guides</a></p>
+      </aside>
+    </div>
+    <section class="related" aria-labelledby="related-title">
+      <h2 id="related-title">Related PDF guides</h2>
+      <div class="related-links">
+        <a href="split-pdf.html">Split PDF</a>
+        <a href="rotate-pdf.html">Rotate PDF</a>
+        <a href="remove-pdf-pages.html">Remove PDF Pages</a>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <a href="index.html">Sohail Tools</a> &middot; <a href="index.html#tools">All tools</a> &middot; <a href="privacy.html">Privacy</a>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="pdf-tools.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Merge PDFs, extract page ranges, reorder or rotate pages, add page numbers, and turn JPG images into PDF in your browser. Plus practical PDF guides.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ed3b36">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sohail Tools">
+  <meta property="og:title" content="Free Online PDF Tools for Daily Tasks | Sohail Tools">
+  <meta property="og:description" content="Merge PDFs, extract page ranges, reorder or rotate pages, add page numbers, and turn JPG images into PDF in your browser.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Free Online PDF Tools for Daily Tasks | Sohail Tools">
+  <meta name="twitter:description" content="Merge PDFs, extract page ranges, reorder or rotate pages, add page numbers, and turn JPG images into PDF in your browser.">
+  <title>Free Online PDF Tools for Daily Tasks | Sohail Tools</title>
+  <style>
+    :root {
+      --red: #ed3b36;
+      --red-dark: #d92d28;
+      --ink: #20242a;
+      --muted: #697080;
+      --line: #e8eaf0;
+      --soft: #f7f8fb;
+      --white: #ffffff;
+      --orange: #ef9a32;
+      --blue: #4b7bec;
+      --green: #42a56a;
+      --purple: #805ad5;
+      --shadow: 0 12px 30px rgba(35, 42, 62, .09);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--white);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 72px;
+      background: rgba(255, 255, 255, .96);
+      border-bottom: 1px solid rgba(232, 234, 240, .9);
+      backdrop-filter: blur(12px);
+    }
+    .nav {
+      width: min(1180px, calc(100% - 40px));
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--red);
+      font-size: 25px;
+      font-weight: 850;
+      letter-spacing: -.8px;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: white;
+      border-radius: 9px;
+      background: var(--red);
+      box-shadow: 0 7px 16px rgba(237, 59, 54, .22);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      margin-left: auto;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 700;
+      color: #4a5060;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { color: white; background: var(--red); }
+    .btn-primary:hover { background: var(--red-dark); box-shadow: 0 8px 18px rgba(237, 59, 54, .22); }
+    .btn-light { color: var(--ink); background: #fff; border: 1px solid var(--line); }
+    .menu-button {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .hero {
+      min-height: 390px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(237,59,54,.055), transparent 24%),
+        radial-gradient(circle at 85% 75%, rgba(75,123,236,.055), transparent 24%),
+        var(--soft);
+      border-bottom: 1px solid #f0f1f5;
+    }
+    .hero-inner { width: min(820px, calc(100% - 40px)); padding: 56px 0 44px; }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(38px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -2.2px;
+    }
+    .hero p {
+      max-width: 700px;
+      margin: 18px auto 28px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .hero-actions { display: flex; justify-content: center; gap: 12px; }
+    .hero-actions .btn { min-height: 52px; padding-inline: 22px; }
+
+    .tools-section { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 72px; }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .section-heading h2 { margin: 0; font-size: 26px; letter-spacing: -.7px; }
+    .section-heading span { color: var(--muted); font-size: 14px; }
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding-bottom: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 15px;
+      background: white;
+      color: #626978;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .filter:hover { border-color: #cfd3dc; }
+    .filter.active { border-color: var(--red); background: var(--red); color: white; }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .tool-card {
+      display: block;
+      min-height: 176px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      background: white;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: transparent;
+      box-shadow: var(--shadow);
+    }
+    .tool-card.hidden { display: none; }
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .tool-icon svg { width: 26px; height: 26px; }
+    .tool-card h3 { margin: 0 0 7px; font-size: 17px; letter-spacing: -.25px; }
+    .tool-card p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+
+    .trust {
+      background: #1f2430;
+      color: white;
+      padding: 42px 20px;
+    }
+    .trust-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .trust-item { display: flex; gap: 14px; align-items: flex-start; }
+    .trust-item strong { display: block; margin-bottom: 5px; }
+    .trust-item span { color: #bec3cf; font-size: 13.5px; line-height: 1.5; }
+    .trust-check {
+      flex: 0 0 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.09);
+      color: #74d39b;
+    }
+    .preview-note {
+      margin: 0 0 20px;
+      padding: 13px 16px;
+      border: 1px solid #f1d89c;
+      border-radius: 9px;
+      background: #fff9e9;
+      color: #684e12;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .guide-section {
+      width: min(900px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 12px 0 64px;
+    }
+    .guide-section h2 { margin: 0 0 14px; font-size: 28px; letter-spacing: -.7px; }
+    .guide-section h3 { margin: 26px 0 8px; font-size: 19px; }
+    .guide-section p, .guide-section li { color: #555d6b; font-size: 15px; line-height: 1.75; }
+    .guide-section ul { padding-left: 22px; }
+    .faq-list { margin-top: 20px; border-top: 1px solid var(--line); }
+    .faq-list details { padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .faq-list summary { cursor: pointer; font-weight: 800; line-height: 1.5; }
+    .faq-list details p { margin: 10px 0 0; }
+    .about-section {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,.15);
+      color: #c4c9d3;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .footer {
+      background: #171a21;
+      color: #aeb3c0;
+    }
+    .footer-inner {
+      width: min(1180px, calc(100% - 40px));
+      min-height: 86px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a:hover { color: white; }
+
+    :focus-visible { outline: 3px solid rgba(75, 123, 236, .4); outline-offset: 3px; }
+
+    @media (max-width: 980px) {
+      .tools-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .nav-links { display: none; }
+      .nav-actions { margin-left: auto; }
+    }
+    @media (max-width: 720px) {
+      .header { height: 64px; }
+      .nav { width: calc(100% - 28px); }
+      .brand { font-size: 22px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .nav-actions .btn-light { display: none; }
+      .menu-button { display: grid; place-items: center; }
+      .nav-actions { gap: 6px; }
+      .nav-actions .btn-primary { min-height: 38px; padding: 8px 12px; }
+      .nav-links.mobile-open {
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        display: grid;
+        gap: 0;
+        padding: 8px 14px 14px;
+        background: white;
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 12px 24px rgba(35,42,62,.08);
+      }
+      .nav-links.mobile-open a { padding: 13px 8px; }
+      .hero { min-height: 360px; }
+      .hero-inner { width: calc(100% - 32px); padding: 42px 0 36px; }
+      .hero h1 { letter-spacing: -1.4px; }
+      .hero p { font-size: 16px; }
+      .tools-section { width: calc(100% - 28px); padding-top: 38px; }
+      .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-heading span { display: none; }
+      .trust-inner { grid-template-columns: 1fr; gap: 22px; }
+      .footer-inner { padding: 24px 0; flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+    @media (max-width: 430px) {
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .tool-card { min-height: 156px; }
+      .nav-actions .btn-primary { display: none; }
+      .footer-links { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="Sohail Tools home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6M8 13h8M8 17h5"/>
+          </svg>
+        </span>
+        Sohail Tools
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#tools">All tools</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#faq">PDF guide</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-light" href="#tools">Browse tools</a>
+        <a class="btn btn-primary" href="#guide">Get started</a>
+        <button class="menu-button" id="menuButton" type="button" aria-label="Open menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <h1 id="hero-title">Free online PDF tools for everyday documents</h1>
+        <p>Merge PDF files, extract page ranges, reorder or rotate pages, add page numbers, and convert JPG images to PDF. Your selected files are processed in your browser.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tools">Choose a PDF tool</a>
+          <a class="btn btn-light" href="#tools">Explore all tools</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-section" id="tools" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <h2 id="tools-title">PDF tools and step-by-step guides</h2>
+        <span>Choose exactly what you need</span>
+      </div>
+      <p class="preview-note"><strong>Browser tools:</strong> Merge PDF, split PDF, organize pages, rotate pages, remove pages, add page numbers, and JPG to PDF work locally in your browser. Other cards open independent how-to guides. No ads are displayed.</p>
+      <div class="filters" role="toolbar" aria-label="Filter PDF tools">
+        <button class="filter active" type="button" data-filter="all">All tools</button>
+        <button class="filter" type="button" data-filter="organize">Organize</button>
+        <button class="filter" type="button" data-filter="convert">Convert</button>
+        <button class="filter" type="button" data-filter="edit">Edit</button>
+        <button class="filter" type="button" data-filter="security">Security</button>
+      </div>
+
+      <div class="tools-grid" id="toolsGrid">
+        <a class="tool-card" href="merge-pdf.html" data-category="organize" data-tool="Merge PDF"><div class="tool-icon" style="background:#ef6a5b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 3h8v14H8zM4 7h8v14H4z"/></svg></div><h3>Merge PDF</h3><p>Combine multiple PDFs into one document.</p></a>
+        <a class="tool-card" href="split-pdf.html" data-category="organize" data-tool="Split PDF"><div class="tool-icon" style="background:#f0a13b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v18M6 7l6-4 6 4M6 17l6 4 6-4"/></svg></div><h3>Split PDF</h3><p>Extract selected pages or ranges into a new PDF.</p></a>
+        <a class="tool-card" href="compress-pdf.html" data-category="organize" data-tool="Compress PDF"><div class="tool-icon" style="background:#6c63df"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4"/></svg></div><h3>Compress PDF</h3><p>Reduce file size while keeping quality.</p></a>
+        <a class="tool-card" href="organize-pdf.html" data-category="organize" data-tool="Organize PDF"><div class="tool-icon" style="background:#4b7bec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><h3>Organize PDF</h3><p>Reorder pages into a custom sequence.</p></a>
+        <a class="tool-card" href="pdf-to-word.html" data-category="convert" data-tool="PDF to Word"><div class="tool-icon" style="background:#3979cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 2h9l5 5v15H6zM15 2v6h5M9 13h7M9 17h5"/></svg></div><h3>PDF to Word</h3><p>Convert PDFs into editable Word files.</p></a>
+        <a class="tool-card" href="pdf-to-jpg.html" data-category="convert" data-tool="PDF to JPG"><div class="tool-icon" style="background:#eebd38"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><h3>PDF to JPG</h3><p>Turn every PDF page into a JPG image.</p></a>
+        <a class="tool-card" href="jpg-to-pdf.html" data-category="convert" data-tool="JPG to PDF"><div class="tool-icon" style="background:#49a96c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16l3-3 2 2 3-4 3 5"/></svg></div><h3>JPG to PDF</h3><p>Create a PDF from one or more images.</p></a>
+        <a class="tool-card" href="word-to-pdf.html" data-category="convert" data-tool="Word to PDF"><div class="tool-icon" style="background:#315ca8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 3h10l4 4v14H5zM15 3v5h5M8 12h8M8 16h6"/></svg></div><h3>Word to PDF</h3><p>Convert DOC and DOCX documents to PDF.</p></a>
+        <a class="tool-card" href="excel-to-pdf.html" data-category="convert" data-tool="Excel to PDF"><div class="tool-icon" style="background:#188653"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 3h10l4 4v14H5zM15 3v5h5M8 12h8M8 16h8M12 11v6"/></svg></div><h3>Excel to PDF</h3><p>Prepare spreadsheets for sharing and printing.</p></a>
+        <a class="tool-card" href="powerpoint-to-pdf.html" data-category="convert" data-tool="PowerPoint to PDF"><div class="tool-icon" style="background:#d46639"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 4h16v13H4zM8 21h8M12 17v4M8 9h8M8 12h5"/></svg></div><h3>PowerPoint to PDF</h3><p>Export slides as a document for sharing.</p></a>
+        <a class="tool-card" href="pdf-to-excel.html" data-category="convert" data-tool="PDF to Excel"><div class="tool-icon" style="background:#217a58"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 3h10l4 4v14H5zM15 3v5h5M8 11h8M8 15h8M8 19h8M12 11v8"/></svg></div><h3>PDF to Excel</h3><p>Review options for extracting tables into spreadsheets.</p></a>
+        <a class="tool-card" href="pdf-to-powerpoint.html" data-category="convert" data-tool="PDF to PowerPoint"><div class="tool-icon" style="background:#c25432"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21h8M12 17v4M7 9h10M7 12h6"/></svg></div><h3>PDF to PowerPoint</h3><p>Understand slide conversion and layout checks.</p></a>
+        <a class="tool-card" href="ocr-pdf.html" data-category="convert" data-tool="OCR PDF"><div class="tool-icon" style="background:#4066c7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 4h16v16H4zM8 9h8M8 12h6M8 15h8"/></svg></div><h3>OCR PDF</h3><p>Learn how OCR makes scanned text searchable.</p></a>
+        <a class="tool-card" href="html-to-pdf.html" data-category="convert" data-tool="HTML to PDF"><div class="tool-icon" style="background:#697080"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></div><h3>HTML to PDF</h3><p>Read about saving web pages as printable PDFs.</p></a>
+        <a class="tool-card" href="edit-pdf.html" data-category="edit" data-tool="Edit PDF"><div class="tool-icon" style="background:#35a6a0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4z"/></svg></div><h3>Edit PDF</h3><p>Add text, shapes and notes to a PDF.</p></a>
+        <a class="tool-card" href="add-page-numbers.html" data-category="edit" data-tool="Add page numbers"><div class="tool-icon" style="background:#9a64d6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 3h12v18H6zM10 17h4"/></svg></div><h3>Add page numbers</h3><p>Add centered numbers to the bottom of every page.</p></a>
+        <a class="tool-card" href="watermark-pdf.html" data-category="edit" data-tool="Watermark PDF"><div class="tool-icon" style="background:#5ba1ba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3S5 10 5 15a7 7 0 0014 0c0-5-7-12-7-12z"/></svg></div><h3>Watermark PDF</h3><p>Stamp text or images across every page.</p></a>
+        <a class="tool-card" href="rotate-pdf.html" data-category="edit" data-tool="Rotate PDF"><div class="tool-icon" style="background:#e47d58"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></svg></div><h3>Rotate PDF</h3><p>Rotate selected pages clockwise by 90 degrees.</p></a>
+        <a class="tool-card" href="remove-pdf-pages.html" data-category="organize" data-tool="Remove PDF pages"><div class="tool-icon" style="background:#767e8c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 3h12v18H6zM9 8h6M9 12h6M9 16h3M17 7l4 4M21 7l-4 4"/></svg></div><h3>Remove PDF pages</h3><p>Remove selected pages and download a new PDF copy.</p></a>
+        <a class="tool-card" href="repair-pdf.html" data-category="organize" data-tool="Repair PDF"><div class="tool-icon" style="background:#4984a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 3h10l4 4v14H5zM15 3v5h5M9 14l2 2 4-5"/></svg></div><h3>Repair PDF</h3><p>Try safe checks when a PDF will not open correctly.</p></a>
+        <a class="tool-card" href="protect-pdf.html" data-category="security" data-tool="Protect PDF"><div class="tool-icon" style="background:#3457b9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div><h3>Protect PDF</h3><p>Add strong password protection.</p></a>
+        <a class="tool-card" href="unlock-pdf.html" data-category="security" data-tool="Unlock PDF"><div class="tool-icon" style="background:#d85d72"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 017.8-1"/></svg></div><h3>Unlock PDF</h3><p>Remove password protection from PDFs.</p></a>
+        <a class="tool-card" href="sign-pdf.html" data-category="security" data-tool="Sign PDF"><div class="tool-icon" style="background:#df4f8a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 18l4-1 11-11a2 2 0 10-3-3L4 14zM12 21h9"/></svg></div><h3>Sign PDF</h3><p>Draw or type a signature on your document.</p></a>
+        <a class="tool-card" href="redact-pdf.html" data-category="security" data-tool="Redact PDF"><div class="tool-icon" style="background:#5c6474"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 3h16v18H4zM8 8h8M8 12h8M8 16h5"/></svg></div><h3>Redact PDF</h3><p>Permanently hide sensitive information.</p></a>
+      </div>
+    </section>
+
+    <article class="guide-section" id="guide" aria-labelledby="guide-title">
+      <h2 id="guide-title">A practical guide to common PDF tasks</h2>
+      <p>PDFs are useful when a document needs to look consistent across devices. The right workflow depends on what you need to do: rearrange pages, share a smaller file, or move content into another format. Keep an untouched copy of important documents before making changes.</p>
+
+      <h3>When should you merge or split a PDF?</h3>
+      <p>Merge files when you need to send related documents as one attachment, such as a report with its appendices. Check the page order before sharing. Split a PDF when only selected pages are relevant or when a large document needs to be divided into smaller sections. Always review the resulting page range to avoid leaving out important information.</p>
+
+      <h3>What to know before compressing or converting</h3>
+      <p>Compression can make a PDF easier to email or store, but strong compression may reduce image sharpness. Keep a high-quality original if the document will be printed or archived. Converting a PDF to an editable document can change spacing, fonts, tables, or page breaks; compare the converted file with the source before relying on it.</p>
+
+      <h3>Convert Excel spreadsheets and PowerPoint slides to PDF</h3>
+      <p>Before exporting a spreadsheet to PDF, check the print area, scaling, page orientation, and whether columns fit on the page. For a presentation, decide whether the PDF should contain full slides, notes, or handouts. Open the exported document and inspect charts, slide order, and small text. These Office conversion pages are independent how-to guides.</p>
+
+      <h3>Convert a PDF to Excel or PowerPoint</h3>
+      <p>PDF-to-Excel conversion attempts to map positioned text into rows and columns. Tables with merged cells, multi-line values, or scanned pages may need manual cleanup. PDF-to-PowerPoint conversion can preserve a page as an image or attempt to recreate editable objects; the result depends on the source layout. Review figures and formatting before using converted data in a report or presentation.</p>
+
+      <h3>Make scanned PDFs searchable with OCR</h3>
+      <p>Optical character recognition (OCR) identifies text in page images and can add a searchable text layer. Results depend on scan clarity, page angle, language, and typeface. OCR can confuse similar characters, so verify names, dates, amounts, and other important details. OCR does not guarantee a perfectly editable copy of the original layout.</p>
+
+      <h3>Remove pages or troubleshoot a damaged PDF</h3>
+      <p>Before removing PDF pages, save a copy and confirm the exact viewer page numbers; printed labels may differ. If a PDF will not open, first try a fresh download, another trusted viewer, and a backup copy. Avoid uploading confidential files to unknown repair sites, and do not assume recovery tools can restore every damaged document.</p>
+
+      <h3>Save a web page as a PDF</h3>
+      <p>A browser&rsquo;s Print or Save as PDF option can create a shareable snapshot of a web page. Use print preview to check page breaks, background graphics, headers, and navigation elements. A saved PDF may not include interactive content, content loaded after printing, or future updates to the original page.</p>
+
+      <h3>Protecting sensitive documents</h3>
+      <p>Use a strong, unique password when a document needs access protection, and share the password through a separate trusted channel. Password protection is not a substitute for checking who can access a file. Before sharing a document, review its pages and metadata for information you did not intend to disclose.</p>
+
+      <h3>Rotate, edit, number, or watermark PDF pages</h3>
+      <p>Rotate only pages that display in the wrong direction; some landscape pages are intentional. Text edits can shift the layout, while comments and highlights are annotations rather than changes to the underlying text. Page numbers should not cover existing footers, and watermarks should remain visible without obscuring important content.</p>
+
+      <h3>Sign, unlock, and redact PDFs carefully</h3>
+      <p>A typed or drawn signature is different from a certificate-based digital signature, so confirm which format a recipient accepts. Only remove access restrictions on documents you own or are authorized to modify. For redaction, use a dedicated redaction feature: drawing a box over sensitive text may leave the original content searchable or extractable.</p>
+
+      <h3>How to choose a PDF workflow</h3>
+      <ul>
+        <li>To send several related files together, prepare them in the intended order before merging.</li>
+        <li>To share only part of a document, identify the exact page range before splitting.</li>
+        <li>To reduce an attachment size, compare readability after compression at normal zoom.</li>
+        <li>To reuse text in another application, proofread the converted document for layout changes.</li>
+      </ul>
+
+      <h3 id="faq">Frequently asked questions</h3>
+      <div class="faq-list">
+        <details>
+          <summary>Which PDF actions can I do with Sohail Tools?</summary>
+          <p>You can merge PDFs, extract page ranges, reorder or rotate pages, remove pages, add page numbers, and create a PDF from JPG or PNG images. Other pages provide practical instructions for workflows that are not active tools here.</p>
+        </details>
+        <details>
+          <summary id="file-handling">Are my PDF files uploaded?</summary>
+          <p>No. Active file tools process the selected document in your browser and do not send its contents to Sohail Tools. The PDF library is loaded from a public CDN; see the privacy information for details.</p>
+        </details>
+        <details>
+          <summary>Will compressing a PDF reduce its quality?</summary>
+          <p>It can. The result depends on the compression method and document contents. Keep the original and inspect the compressed copy, especially if it contains small text or detailed images.</p>
+        </details>
+        <details>
+          <summary>Why can a converted PDF look different?</summary>
+          <p>PDF and word-processing formats handle fonts, page layout, and images differently. Page breaks, tables, and spacing may shift during conversion, so proofread the output before using or sharing it.</p>
+        </details>
+        <details>
+          <summary>Can OCR make every scanned PDF fully editable?</summary>
+          <p>OCR can recognize text, but accuracy varies with image quality, layout, and language. It may not recreate the original formatting, so proofread important content and keep the source scan.</p>
+        </details>
+        <details>
+          <summary>Why can spreadsheet tables change when converted?</summary>
+          <p>PDFs position text visually rather than storing every table as spreadsheet cells. Merged cells, wrapped text, and multiple columns can make extraction imperfect; verify totals and row alignment.</p>
+        </details>
+        <details>
+          <summary>Is PDF repair guaranteed to recover a damaged file?</summary>
+          <p>No. Recovery depends on the type and extent of damage. Keep the original file, try a backup or fresh download, and use trusted software before considering any repair service.</p>
+        </details>
+      </div>
+    </article>
+
+    <section class="trust" id="features" aria-label="Product benefits">
+      <div class="trust-inner">
+        <div class="trust-item"><span class="trust-check" aria-hidden="true">&#10003;</span><div><strong>Local file processing</strong><span>Supported actions run in your browser; your document contents are not uploaded.</span></div></div>
+        <div class="trust-item"><span class="trust-check" aria-hidden="true">&#10003;</span><div><strong>Responsive design</strong><span>Read the guides on desktop, tablet, or mobile.</span></div></div>
+        <div class="trust-item"><span class="trust-check" aria-hidden="true">&#10003;</span><div><strong>Standalone guides</strong><span>Every listed PDF workflow has a focused page with practical steps.</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <span>&copy; 2026 Sohail Tools. All rights reserved.</span>
+      <div class="footer-links"><a href="#tools">Tools</a><a href="#file-handling">File handling</a><a href="privacy.html">Privacy</a><a href="#about">About</a><a href="#faq">FAQ</a></div>
+    </div>
+    <div class="about-section" id="about">
+      <strong>About Sohail Tools</strong>
+      <p>Sohail Tools provides useful browser-based PDF actions and original, practical guidance for common document workflows. Supported tools run on your device. We display no ads.</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const menuButton = document.getElementById("menuButton");
+      const navLinks = document.getElementById("navLinks");
+
+      document.querySelectorAll(".filter").forEach(filter => {
+        filter.addEventListener("click", () => {
+          document.querySelectorAll(".filter").forEach(item => item.classList.remove("active"));
+          filter.classList.add("active");
+          const selected = filter.dataset.filter;
+          document.querySelectorAll(".tool-card").forEach(card => {
+            card.classList.toggle("hidden", selected !== "all" && card.dataset.category !== selected);
+          });
+        });
+      });
+
+      menuButton.addEventListener("click", () => {
+        const open = navLinks.classList.toggle("mobile-open");
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      });
+      navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+        navLinks.classList.remove("mobile-open");
+        menuButton.setAttribute("aria-expanded", "false");
+      }));
+    })();
+  </script>
+</body>
+</html>
